@@ -23,13 +23,19 @@ class RushHour:
         self.list = p[0]
 
         # set the game board according to the list
+        a_coordinates = []
         list_index = 0
         for y in range(0, 6):
             for x in range(0, 6):
                 self.board[x][y] = self.list[list_index]
+                if (self.list[list_index] == 'A'): a_coordinates.append((x, y)) # save ambulance coordinates
                 if (self.board[x][y] not in self.fuel) and (self.board[x][y] != '.'):
                     self.fuel[self.board[x][y]] = 100
                 list_index += 1
+        
+        # check if Ambulance (A) is horizontal in the middle of the board
+        is_a_valid = all([True if coordinate[1] == 2 else False for coordinate in a_coordinates])
+        if not is_a_valid: raise ValueError('Ambulance not properly placed on the board')
 
         # modify fuel levels if provided
         if len(p) > 1:
@@ -113,6 +119,16 @@ class RushHour:
 
         return True
 
+    # check if the game is done
+    def is_end(self):
+        # get coordinates of Ambulance (A)
+        a_coordinates = []
+        for y in range(0, 6):
+            for x in range(0, 6):
+                if self.board[x][y] == 'A': a_coordinates.append((x, y))
+        x_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        if (x_coordinate == 5): return True
+        else: return False
 
 # Runner
 if __name__ == '__main__':
