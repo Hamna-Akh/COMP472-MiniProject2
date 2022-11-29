@@ -1,4 +1,4 @@
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from copy import deepcopy
 import time
 
@@ -20,11 +20,6 @@ class RushHour:
         self.fuel = {}
         self.cars = []
         self.initialize_game(p)
-
-    def set_new_state(self, string, board, fuel):
-        self.string_puzzle = string
-        self.board = board
-        self.fuel = fuel
 
     # initializes the state of the game
     def initialize_game(self, p):
@@ -61,21 +56,6 @@ class RushHour:
                 string = string + board[x][y]
         return string
 
-    # returns board representation from string representation
-    def generate_board_from_string(self, string):
-        board = [['.','.','.','.','.','.'],
-                 ['.','.','.','.','.','.'],
-                 ['.','.','.','.','.','.'],
-                 ['.','.','.','.','.','.'],
-                 ['.','.','.','.','.','.'],
-                 ['.','.','.','.','.','.']]
-        list_index = 0
-        for y in range(0, 6):
-            for x in range(0, 6):
-                board[x][y] = string[list_index]
-                list_index += 1
-        return board
-
     # returns coordinates for specific car
     def get_car_coordinates(self, car, board=None):
         if board is None:
@@ -86,6 +66,7 @@ class RushHour:
                 if board[x][y] == car: car_coordinates.append((x, y))
         return car_coordinates
 
+    # TO HELP WITH DEBUGGING
     # prints the board
     def print_board(self, board=None):
         if board is None:
@@ -239,7 +220,7 @@ class RushHour:
 
 class UCSNode:
     """
-    Node class are the nodes used by SearchTree to build a search space of the Puzzle.
+    Node class are the nodes used by UCSSearchTree to build a search space of the Puzzle.
     """
     def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
         self.string_puzzle = string_puzzle
@@ -255,7 +236,7 @@ class UCSNode:
         self.f = g + h
 
     def set_children(self, children):
-        self.children(children)
+        self.children = children
 
 class UCSSearchTree:
 
@@ -265,8 +246,10 @@ class UCSSearchTree:
         self.id = puzzle_number
         self.puzzle = RushHour(initial_state) # create puzzle instance
         self.root = UCSNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
-        self.open = [self.root]
-        self.closed = []
+        self.open = [self.root] # list of open nodes
+        self.closed = [] # list of closed nodes
+        self.visited = [] # list of visited puzzle strings states (for easier search)
+        self.solution_path = [] # list of nodes in the solution path
 
     def uniform_cost_search(self):
         # initialize output files
@@ -281,38 +264,84 @@ class UCSSearchTree:
 
         start = time.time()
         while True:
-            if self.puzzle.is_end(self.open[0].board): # reached goal
+            if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
                 solution_file.write(F'Runtime: {round(time.time() - start, 7)}s \n')
-                #### WRITE OTHER SOLUTION PARAMS
+                current_node = self.open[0]
+                search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
+                # compute solution path
+                while True:
+                    self.solution_path.append(current_node)
+                    if current_node.parent == None: break
+                    else: current_node = current_node.parent
+                self.solution_path.reverse()
+                self.solution_path.pop(0) # removes root node from solution path
+                
+                # write solutions to file
+                solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
+                solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
+                solution_file.write("Solution path: ")
+                for node in self.solution_path:
+                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
+                solution_file.write("\n\n")
+                for node in self.solution_path:
+                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
+                solution_file.write("\n")
+                solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
                 break
             else:
                 all_children = self.generate_all_children_ucs(self.open[0])
-                ### check if state has already been visited in closed or if same state of lower cost already exists in open
-                ### delete from all_children if true
-                ### add rest of all children to open
-                ### sort open by lowest g
+                # remove child if it has already been visited
+                non_visited_children = [child for child in all_children if child.string_puzzle not in self.visited]
 
-                ### if open is empty return no solution
-                break
+                # add children to visit to open
+                for child in non_visited_children:
+                    self.open.append(child)
+
+                # remove from open if lower cost state exists in open
+                self.open = [node for node in self.open if not self.has_lower_cost_in_open(node)]
+
+                # sort open by lowest f (same as g in this case)
+                self.open.sort(key=attrgetter('f'))
+
+                # close current node
+                visited_node = self.open.pop(0)
+                self.closed.append(visited_node)
+                self.visited.append(visited_node.string_puzzle)
+
+                # add searched node to search file
+                current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
+                search_file.write(current_search + "\n")
+
+                if len(self.open) == 0: # no solution can be found
+                    solution_file.write("no solution")
+                    break
         search_file.close()
         solution_file.close()
         return
 
-    def generate_all_children_ucs(self, node):
+    def generate_all_children_ucs(self, node: UCSNode):
         children = []
         for car in self.puzzle.cars:
             for action in self.ACTIONS:
+                move_counter = 1
                 while True:
-                    move_counter = 1
                     child = self.puzzle.preview_action(car, action, move_counter, node.fuel, node.board)
                     if child == None: break # changes action for car if move is not valid
-
                     # adds new children (cost is always +1 no matter the distance)
                     # no heuristic in ucs (h = 0)
-                    else: children.append(UCSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)) 
+                    else:
+                        child_node = UCSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
+                        if child_node.string_puzzle != node.string_puzzle: children.append(child_node) # do not append parent
                     move_counter += 1
         node.set_children(children)
         return children
+    
+    ### HAVE TO REWORK THIS IS TOO SLOW
+    def has_lower_cost_in_open(self, node: UCSNode):
+        for open_node in self.open:
+            if (open_node.string_puzzle == node.string_puzzle) and (open_node.f < node.f):
+                return True
+        return False
     
     def run(self):
         self.uniform_cost_search()
@@ -324,12 +353,13 @@ if __name__ == '__main__':
     lines = [line.strip() for line in puzzles_file.readlines() if line.strip()] # Removes empty lines
     puzzles_file.close()
 
+    puzzle_counter = 1
     for line in lines:
         if not line.startswith('#'): # skips over comment lines
-            puzzle_counter = 1
-            game = UCSSearchTree(line.split(), puzzle_counter)
-            game.run()
+            try:
+                game = UCSSearchTree(line.split(), puzzle_counter)
+                game.run()
+            except ValueError:
+                print("Puzzle #" + str(puzzle_counter) + " is not configured properly")
+            except Exception as e: print(e)
             puzzle_counter += 1
-            # string, board, fuel = game.preview_action('A', 'right', 1)
-            # game.draw_board(board)
-            # print(game.is_valid('L', 'right', 1))
