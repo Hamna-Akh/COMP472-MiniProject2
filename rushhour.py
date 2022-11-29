@@ -1,5 +1,6 @@
 from operator import itemgetter
 from copy import deepcopy
+import time
 
 class RushHour:
     """
@@ -17,6 +18,7 @@ class RushHour:
                       ['.','.','.','.','.','.'],
                       ['.','.','.','.','.','.']]
         self.fuel = {}
+        self.cars = []
         self.initialize_game(p)
 
     def set_new_state(self, string, board, fuel):
@@ -33,6 +35,7 @@ class RushHour:
         list_index = 0
         for y in range(0, 6):
             for x in range(0, 6):
+                if (self.string_puzzle[list_index] not in self.cars) and (self.string_puzzle[list_index] != "."): self.cars.append(self.string_puzzle[list_index]) # add car to car list
                 self.board[x][y] = self.string_puzzle[list_index]
                 if (self.string_puzzle[list_index] == 'A'): a_coordinates.append((x, y)) # save ambulance coordinates
                 if (self.board[x][y] not in self.fuel) and (self.board[x][y] != '.'):
@@ -83,8 +86,8 @@ class RushHour:
                 if board[x][y] == car: car_coordinates.append((x, y))
         return car_coordinates
 
-    # draws the board
-    def draw_board(self, board=None):
+    # prints the board
+    def print_board(self, board=None):
         if board is None:
             board = self.board
         print()
@@ -93,6 +96,17 @@ class RushHour:
                 print(F'{board[x][y]}', end="")
             print()
         print()
+    
+    # converts board to string
+    def stringify_board(self, string_puzzle=None):
+        if string_puzzle is None:
+            string_puzzle = self.string_puzzle
+        return f'{"".join(string_puzzle[:6])}\n' \
+               f'{"".join(string_puzzle[6:12])}\n' \
+               f'{"".join(string_puzzle[12:18])}\n' \
+               f'{"".join(string_puzzle[18:24])}\n' \
+               f'{"".join(string_puzzle[24:30])}\n' \
+               f'{"".join(string_puzzle[30:36])}\n' \
 
     # validates move
     def is_valid(self, car, action, moves, fuel=None, board=None):
@@ -165,7 +179,7 @@ class RushHour:
     # checks if the game is done
     def is_end(self, board=None):
         if board is None:
-            board = board
+            board = self.board
         # get coordinates of Ambulance (A)
         a_coordinates = self.get_car_coordinates('A', board)
         x_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
@@ -176,7 +190,7 @@ class RushHour:
         Returns (string, board, fuel) resulting from applying a specific action.
         If action is not allowed, returns None
     """
-    def preview_action(self, car, action, moves, fuel=None, board=None,):
+    def preview_action(self, car, action, moves, fuel=None, board=None):
         if board is None:
             board = self.board
         if fuel is None:
@@ -223,6 +237,86 @@ class RushHour:
         else:
             return None
 
+class UCSNode:
+    """
+    Node class are the nodes used by SearchTree to build a search space of the Puzzle.
+    """
+    def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
+        self.string_puzzle = string_puzzle
+        self.board = board
+        self.fuel = fuel
+        self.parent = parent
+        self.children = []
+        self.car = car
+        self.action = action
+        self.moves = moves
+        self.g = g  # actual path cost to current node
+        self.h = h  # predicted cost to goal (heuristic)
+        self.f = g + h
+
+    def set_children(self, children):
+        self.children(children)
+
+class UCSSearchTree:
+
+    ACTIONS = ['up', 'right', 'down', 'left']
+
+    def __init__(self, initial_state, puzzle_number):
+        self.id = puzzle_number
+        self.puzzle = RushHour(initial_state) # create puzzle instance
+        self.root = UCSNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
+        self.open = [self.root]
+        self.closed = []
+
+    def uniform_cost_search(self):
+        # initialize output files
+        search_filename = "ucs-search-" + str(self.id) + ".txt"
+        solution_filename = "ucs-sol-" + str(self.id) + ".txt"
+        search_file = open(search_filename, "w")
+        solution_file = open(solution_filename, "w")
+
+        solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
+        solution_file.write(self.puzzle.stringify_board() + "\n")
+        solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
+
+        start = time.time()
+        while True:
+            if self.puzzle.is_end(self.open[0].board): # reached goal
+                solution_file.write(F'Runtime: {round(time.time() - start, 7)}s \n')
+                #### WRITE OTHER SOLUTION PARAMS
+                break
+            else:
+                all_children = self.generate_all_children_ucs(self.open[0])
+                ### check if state has already been visited in closed or if same state of lower cost already exists in open
+                ### delete from all_children if true
+                ### add rest of all children to open
+                ### sort open by lowest g
+
+                ### if open is empty return no solution
+                break
+        search_file.close()
+        solution_file.close()
+        return
+
+    def generate_all_children_ucs(self, node):
+        children = []
+        for car in self.puzzle.cars:
+            for action in self.ACTIONS:
+                while True:
+                    move_counter = 1
+                    child = self.puzzle.preview_action(car, action, move_counter, node.fuel, node.board)
+                    if child == None: break # changes action for car if move is not valid
+
+                    # adds new children (cost is always +1 no matter the distance)
+                    # no heuristic in ucs (h = 0)
+                    else: children.append(UCSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)) 
+                    move_counter += 1
+        node.set_children(children)
+        return children
+    
+    def run(self):
+        self.uniform_cost_search()
+
 # Runner
 if __name__ == '__main__':
     # 2.2 Dealing with input file
@@ -232,8 +326,10 @@ if __name__ == '__main__':
 
     for line in lines:
         if not line.startswith('#'): # skips over comment lines
-            game = RushHour(line.split())
-            game.draw_board()
+            puzzle_counter = 1
+            game = UCSSearchTree(line.split(), puzzle_counter)
+            game.run()
+            puzzle_counter += 1
             # string, board, fuel = game.preview_action('A', 'right', 1)
             # game.draw_board(board)
             # print(game.is_valid('L', 'right', 1))
