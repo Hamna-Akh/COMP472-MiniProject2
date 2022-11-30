@@ -289,16 +289,16 @@ class UCSSearchTree:
                 solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
                 break
             else:
-                all_children = self.generate_all_children_ucs(self.open[0])
-                # remove child if it has already been visited
-                non_visited_children = [child for child in all_children if child.string_puzzle not in self.visited]
+                # removes this node from the open list if list contains another similar state of lower or same cost
+                if self.has_lower_cost_in_open(self.open[0]):
+                    self.open.pop(0)
+                    continue
+
+                children = self.generate_all_children_ucs(self.open[0]) # generate all unvisited children
 
                 # add children to visit to open
-                for child in non_visited_children:
+                for child in children:
                     self.open.append(child)
-
-                # remove from open if lower cost state exists in open
-                self.open = [node for node in self.open if not self.has_lower_cost_in_open(node)]
 
                 # sort open by lowest f (same as g in this case)
                 self.open.sort(key=attrgetter('f'))
@@ -329,17 +329,24 @@ class UCSSearchTree:
                     if child == None: break # changes action for car if move is not valid
                     # adds new children (cost is always +1 no matter the distance)
                     # no heuristic in ucs (h = 0)
-                    else:
-                        child_node = UCSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
-                        if child_node.string_puzzle != node.string_puzzle: children.append(child_node) # do not append parent
+                    child_node = UCSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
+
+                    is_parent_node = (child_node.string_puzzle == node.string_puzzle)
+                    has_been_visited = (child_node.string_puzzle in self.visited)
+                    if ((not is_parent_node) and # do not append parent
+                        (not has_been_visited)): # has not already been visited
+                        children.append(child_node) 
                     move_counter += 1
         node.set_children(children)
         return children
     
-    ### HAVE TO REWORK THIS IS TOO SLOW
     def has_lower_cost_in_open(self, node: UCSNode):
+        skip_first = True
         for open_node in self.open:
-            if (open_node.string_puzzle == node.string_puzzle) and (open_node.f < node.f):
+            if skip_first: # skips the first place (since this method is called from the first node in open always)
+                skip_first = False
+                continue
+            if (open_node.string_puzzle == node.string_puzzle) and (open_node.f <= node.f):
                 return True
         return False
     

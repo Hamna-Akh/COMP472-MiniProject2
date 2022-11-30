@@ -8,3 +8,25 @@ G..JEE
 FF.J..
 
 Car fuel available: {'I': 100, 'B': 100, 'K': 100, 'G': 100, 'H': 100, 'A': 100, 'L': 100, 'D': 100, 'J': 100, 'E': 100, 'F': 100}
+Runtime: 2.1036732s 
+Search path length: 2554 states
+Solution path length: 10 moves
+Solution path: L up 2; H down 1; A left 1; K up 1; D right 2; J up 4; E left 2; D left 2; K down 3; A right 3; 
+
+L up 2             98 ..I..LBBI.KLGHAAK.GHDDK.G..JEEFF.J..
+H down 1             99 ..I..LBBI.KLG.AAK.GHDDK.GH.JEEFF.J..
+A left 1             99 ..I..LBBI.KLGAA.K.GHDDK.GH.JEEFF.J..
+K up 1             99 ..I.KLBBI.KLGAA.K.GHDD..GH.JEEFF.J..
+D right 2             98 ..I.KLBBI.KLGAA.K.GH..DDGH.JEEFF.J..
+J up 4             96 ..IJKLBBIJKLGAA.K.GH..DDGH..EEFF....
+E left 2             98 ..IJKLBBIJKLGAA.K.GH..DDGHEE..FF....
+D left 2             96 ..IJKLBBIJKLGAA.K.GHDD..GHEE..FF....
+K down 3             96 ..IJ.LBBIJ.LGAA...GHDDK.GHEEK.FF..K.
+A right 3             96 ..IJ.LBBIJ.LG...AAGHDDK.GHEEK.FF..K.
+
+..IJ.L
+BBIJ.L
+G...AA
+GHDDK.
+GHEEK.
+FF..K.
