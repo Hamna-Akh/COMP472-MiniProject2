@@ -8,7 +8,7 @@ G..JEE
 FF.J..
 
 Car fuel available: {'I': 100, 'B': 100, 'K': 100, 'G': 100, 'H': 100, 'A': 100, 'L': 100, 'D': 100, 'J': 100, 'E': 100, 'F': 100}
-Runtime: 2.1036732s 
+Runtime: 2.115509s 
 Search path length: 2554 states
 Solution path length: 10 moves
 Solution path: L up 2; H down 1; A left 1; K up 1; D right 2; J up 4; E left 2; D left 2; K down 3; A right 3; 

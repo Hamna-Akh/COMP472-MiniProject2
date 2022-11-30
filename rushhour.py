@@ -1,5 +1,6 @@
 from operator import itemgetter, attrgetter
 from copy import deepcopy
+import os.path
 import time
 
 class RushHour:
@@ -253,21 +254,23 @@ class UCSSearchTree:
 
     def uniform_cost_search(self):
         # initialize output files
+        current_directory = os.path.dirname(os.path.realpath(__file__))
+        output_directory = "outputs"
         search_filename = "ucs-search-" + str(self.id) + ".txt"
         solution_filename = "ucs-sol-" + str(self.id) + ".txt"
-        search_file = open(search_filename, "w")
-        solution_file = open(solution_filename, "w")
-
-        solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
-        solution_file.write(self.puzzle.stringify_board() + "\n")
-        solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
+        search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
+        solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
 
         start = time.time()
         while True:
             if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
+                solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
+                solution_file.write(self.puzzle.stringify_board() + "\n")
+                solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
                 solution_file.write(F'Runtime: {round(time.time() - start, 7)}s \n')
                 current_node = self.open[0]
                 search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
+                
                 # compute solution path
                 while True:
                     self.solution_path.append(current_node)
@@ -343,7 +346,9 @@ class UCSSearchTree:
     def has_lower_cost_in_open(self, node: UCSNode):
         skip_first = True
         for open_node in self.open:
-            if skip_first: # skips the first place (since this method is called from the first node in open always)
+            # skips the first place (since this method is called from the first node in open always)
+            # don't want to compare it to itself
+            if skip_first:
                 skip_first = False
                 continue
             if (open_node.string_puzzle == node.string_puzzle) and (open_node.f <= node.f):
