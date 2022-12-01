@@ -8,7 +8,7 @@ FFKL.N
 .HH...
 
 Car fuel available: {'J': 100, 'B': 100, 'C': 100, 'D': 100, 'M': 100, 'A': 100, 'L': 100, 'F': 100, 'K': 100, 'N': 100, 'G': 100, 'H': 100}
-Runtime: 8.48141s 
+Runtime: 8.6709s 
 Search path length: 9769 states
 Solution path length: 17 moves
 Solution path: H right 2; K down 1; L up 1; F right 3; J down 3; A left 1; D left 1; B left 1; K up 4; G left 2; F left 2; L down 2; A right 3; K down 1; C left 1; M up 1; A right 1; 

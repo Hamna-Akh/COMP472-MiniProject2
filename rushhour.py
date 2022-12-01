@@ -2,6 +2,7 @@ from operator import itemgetter, attrgetter
 from copy import deepcopy
 import os.path
 import time
+import csv
 
 class RushHour:
     """
@@ -221,7 +222,7 @@ class RushHour:
 
 class UCSNode:
     """
-    Node class are the nodes used by UCSSearchTree to build a search space of the Puzzle.
+    UCSNodes are the nodes used by UCSSearchTree to build a UCS search space for the puzzle.
     """
     def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
         self.string_puzzle = string_puzzle
@@ -252,6 +253,15 @@ class UCSSearchTree:
         self.visited = [] # list of visited puzzle strings states (for easier search)
         self.solution_path = [] # list of nodes in the solution path
 
+    """
+    Searches for puzzle solution with the uniform cost search algorithm.
+    Writes solution (if any) to solution file and search path to search file.
+    Returns (as a list):
+        Length of the solution (0 if no solution)
+        Length of the Search Path
+        Execution Time
+        Cost of solution (None if no solution)
+    """
     def uniform_cost_search(self):
         # initialize output files
         current_directory = os.path.dirname(os.path.realpath(__file__))
@@ -262,12 +272,16 @@ class UCSSearchTree:
         solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
 
         start = time.time()
+        execution_time = 0
+        cost_of_solution = None
+
         while True:
             if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
                 solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
                 solution_file.write(self.puzzle.stringify_board() + "\n")
                 solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
-                solution_file.write(F'Runtime: {round(time.time() - start, 7)}s \n')
+                execution_time = round(time.time() - start, 4)
+                solution_file.write(F'Runtime: {execution_time}s \n')
                 current_node = self.open[0]
                 search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
                 
@@ -279,6 +293,8 @@ class UCSSearchTree:
                 self.solution_path.reverse()
                 self.solution_path.pop(0) # removes root node from solution path
                 
+                cost_of_solution = self.solution_path[-1].g
+
                 # write solutions to file
                 solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
                 solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
@@ -316,11 +332,12 @@ class UCSSearchTree:
                 search_file.write(current_search + "\n")
 
                 if len(self.open) == 0: # no solution can be found
+                    execution_time = round(time.time() - start, 4)
                     solution_file.write("no solution")
                     break
         search_file.close()
-        solution_file.close()
-        return
+        solution_file.close() 
+        return [len(self.solution_path), len(self.closed), execution_time, cost_of_solution]
 
     def generate_all_children_ucs(self, node: UCSNode):
         children = []
@@ -356,7 +373,7 @@ class UCSSearchTree:
         return False
     
     def run(self):
-        self.uniform_cost_search()
+        return self.uniform_cost_search()
 
 # Runner
 if __name__ == '__main__':
@@ -365,13 +382,25 @@ if __name__ == '__main__':
     lines = [line.strip() for line in puzzles_file.readlines() if line.strip()] # Removes empty lines
     puzzles_file.close()
 
+    # Setting up csv file for data analysis
+    analysis_header = ["Puzzle Number", "Algorithm", "Heuristic", "Length of the Solution", "Length of the Search Path", "Execution Time (in seconds)", "Cost of Solution"]
+    analysis_data = []
+    analysis_file = open('analysis.csv', 'w', encoding='UTF8', newline='')
+    writer = csv.writer(analysis_file)
+    writer.writerow(analysis_header)
+
     puzzle_counter = 1
     for line in lines:
         if not line.startswith('#'): # skips over comment lines
             try:
-                game = UCSSearchTree(line.split(), puzzle_counter)
-                game.run()
+                ucs_search = UCSSearchTree(line.split(), puzzle_counter)
+                ucs_results = ucs_search.run()
+                ucs_data = [puzzle_counter, "UCS", "N/A"] + ucs_results
+                writer.writerow(ucs_data)
+
+                ### WRITE YOUR ALGORITHM HERE SIMILAR TO THE UCS ABOVE (don't forget to write data to csv file)
             except ValueError:
                 print("Puzzle #" + str(puzzle_counter) + " is not configured properly")
             except Exception as e: print(e)
             puzzle_counter += 1
+    analysis_file.close()
