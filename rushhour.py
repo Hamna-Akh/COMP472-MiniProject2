@@ -384,7 +384,6 @@ if __name__ == '__main__':
 
     # Setting up csv file for data analysis
     analysis_header = ["Puzzle Number", "Algorithm", "Heuristic", "Length of the Solution", "Length of the Search Path", "Execution Time (in seconds)", "Cost of Solution"]
-    analysis_data = []
     analysis_file = open('analysis.csv', 'w', encoding='UTF8', newline='')
     writer = csv.writer(analysis_file)
     writer.writerow(analysis_header)
