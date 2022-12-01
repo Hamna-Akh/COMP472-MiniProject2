@@ -379,6 +379,7 @@ class UCSSearchTree:
 if __name__ == '__main__':
     # 2.2 Dealing with input file
     puzzles_file = open('sample-input.txt', 'r')
+    # puzzles_file = open('puzzles.txt', 'r') # Full 50 puzzles file
     lines = [line.strip() for line in puzzles_file.readlines() if line.strip()] # Removes empty lines
     puzzles_file.close()
 

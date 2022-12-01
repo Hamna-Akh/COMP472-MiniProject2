@@ -1,54 +1,40 @@
-Initial board configuration: BB.G.HE..G.HEAAG.I..FCCIDDF..I..F...
+Initial board configuration: MMBBCO....CO.AA.DO.PEED..P.F...P.FGG
 
-BB.G.H
-E..G.H
-EAAG.I
-..FCCI
-DDF..I
-..F...
+MMBBCO
+....CO
+.AA.DO
+.PEED.
+.P.F..
+.P.FGG
 
-Car fuel available: {'B': 100, 'G': 100, 'H': 100, 'E': 100, 'A': 100, 'I': 100, 'F': 100, 'C': 100, 'D': 100}
-Runtime: 0.5582s 
-Search path length: 1518 states
-Solution path length: 32 moves
-Solution path: I down 1; H down 1; B right 1; E up 1; A left 1; F up 2; D right 3; F down 2; A right 1; E down 4; A left 1; B left 1; F up 3; C left 3; F down 3; G down 1; B right 4; F up 3; G up 1; C right 3; F down 3; A right 1; E up 4; A left 1; F up 3; D left 3; C left 3; F down 3; G down 3; B left 1; H up 1; A right 4; 
+Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'O': 100, 'A': 100, 'D': 100, 'P': 100, 'E': 100, 'F': 100, 'G': 100}
+Runtime: 0.4057s 
+Search path length: 1124 states
+Solution path length: 18 moves
+Solution path: D down 1; A right 1; O down 2; C down 1; B right 2; M right 2; P up 3; E left 2; F up 1; G left 3; F down 1; E right 2; P down 1; O down 1; M left 2; B left 2; C up 1; A right 2; 
 
-I down 1             99 BB.G.HE..G.HEAAG....FCCIDDF..I..F..I
-H down 1             99 BB.G..E..G.HEAAG.H..FCCIDDF..I..F..I
-B right 1             99 .BBG..E..G.HEAAG.H..FCCIDDF..I..F..I
-E up 1             99 EBBG..E..G.H.AAG.H..FCCIDDF..I..F..I
-A left 1             99 EBBG..E..G.HAA.G.H..FCCIDDF..I..F..I
-F up 2             98 EBBG..E.FG.HAAFG.H..FCCIDD...I.....I
-D right 3             97 EBBG..E.FG.HAAFG.H..FCCI...DDI.....I
-F down 2             96 EBBG..E..G.HAA.G.H..FCCI..FDDI..F..I
-A right 1             98 EBBG..E..G.H.AAG.H..FCCI..FDDI..F..I
-E down 4             95 .BBG.....G.H.AAG.H..FCCIE.FDDIE.F..I
-A left 1             97 .BBG.....G.HAA.G.H..FCCIE.FDDIE.F..I
-B left 1             98 BB.G.....G.HAA.G.H..FCCIE.FDDIE.F..I
-F up 3             93 BBFG....FG.HAAFG.H...CCIE..DDIE....I
-C left 3             97 BBFG....FG.HAAFG.HCC...IE..DDIE....I
-F down 3             90 BB.G.....G.HAA.G.HCCF..IE.FDDIE.F..I
-G down 1             99 BB.......G.HAA.G.HCCFG.IE.FDDIE.F..I
-B right 4             94 ....BB...G.HAA.G.HCCFG.IE.FDDIE.F..I
-F up 3             87 ..F.BB..FG.HAAFG.HCC.G.IE..DDIE....I
-G up 1             98 ..FGBB..FG.HAAFG.HCC...IE..DDIE....I
-C right 3             94 ..FGBB..FG.HAAFG.H...CCIE..DDIE....I
-F down 3             84 ...GBB...G.HAA.G.H..FCCIE.FDDIE.F..I
-A right 1             96 ...GBB...G.H.AAG.H..FCCIE.FDDIE.F..I
-E up 4             91 E..GBBE..G.H.AAG.H..FCCI..FDDI..F..I
-A left 1             95 E..GBBE..G.HAA.G.H..FCCI..FDDI..F..I
-F up 3             81 E.FGBBE.FG.HAAFG.H...CCI...DDI.....I
-D left 3             94 E.FGBBE.FG.HAAFG.H...CCIDD...I.....I
-C left 3             91 E.FGBBE.FG.HAAFG.HCC...IDD...I.....I
-F down 3             78 E..GBBE..G.HAA.G.HCCF..IDDF..I..F..I
-G down 3             95 E...BBE....HAA...HCCFG.IDDFG.I..FG.I
-B left 1             93 E..BB.E....HAA...HCCFG.IDDFG.I..FG.I
-H up 1             98 E..BBHE....HAA....CCFG.IDDFG.I..FG.I
-A right 4             91 E..BBHE....H....AACCFG.IDDFG.I..FG.I
+D down 1             99 MMBBCO....CO.AA..O.PEED..P.FD..P.FGG
+A right 1             99 MMBBCO....CO..AA.O.PEED..P.FD..P.FGG
+O down 2             98 MMBBC.....C...AA.O.PEEDO.P.FDO.P.FGG
+C down 1             99 MMBB......C...AACO.PEEDO.P.FDO.P.FGG
+B right 2             98 MM..BB....C...AACO.PEEDO.P.FDO.P.FGG
+M right 2             98 ..MMBB....C...AACO.PEEDO.P.FDO.P.FGG
+P up 3             97 .PMMBB.P..C..PAACO..EEDO...FDO...FGG
+E left 2             98 .PMMBB.P..C..PAACOEE..DO...FDO...FGG
+F up 1             99 .PMMBB.P..C..PAACOEE.FDO...FDO....GG
+G left 3             97 .PMMBB.P..C..PAACOEE.FDO...FDO.GG...
+F down 1             98 .PMMBB.P..C..PAACOEE..DO...FDO.GGF..
+E right 2             96 .PMMBB.P..C..PAACO..EEDO...FDO.GGF..
+P down 1             96 ..MMBB.P..C..PAACO.PEEDO...FDO.GGF..
+O down 1             97 ..MMBB.P..C..PAAC..PEEDO...FDO.GGF.O
+M left 2             96 MM..BB.P..C..PAAC..PEEDO...FDO.GGF.O
+B left 2             96 MMBB...P..C..PAAC..PEEDO...FDO.GGF.O
+C up 1             98 MMBBC..P..C..PAA...PEEDO...FDO.GGF.O
+A right 2             97 MMBBC..P..C..P..AA.PEEDO...FDO.GGF.O
 
-E..BBH
-E....H
-....AA
-CCFG.I
-DDFG.I
-..FG.I
+MMBBC.
+.P..C.
+.P..AA
+.PEEDO
+...FDO
+.GGF.O

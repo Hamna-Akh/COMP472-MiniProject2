@@ -1,0 +1,42 @@
+Initial board configuration: MMB..O..B..OAACP.O..CPDDEFFP..EGG...
+
+MMB..O
+..B..O
+AACP.O
+..CPDD
+EFFP..
+EGG...
+
+Car fuel available: {'M': 100, 'B': 100, 'O': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100, 'E': 100, 'F': 100, 'G': 100}
+Runtime: 16.5787s 
+Search path length: 15499 states
+Solution path length: 20 moves
+Solution path: G right 2; P up 2; F right 2; C down 2; D left 3; P down 1; O down 3; B down 1; M right 4; B up 1; A right 1; E up 4; D left 1; A left 1; C up 2; G left 2; F left 3; P down 2; C down 1; A right 4; 
+
+G right 2             98 MMB..O..B..OAACP.O..CPDDEFFP..E..GG.
+P up 2             98 MMBP.O..BP.OAACP.O..C.DDEFF...E..GG.
+F right 2             98 MMBP.O..BP.OAACP.O..C.DDE..FF.E..GG.
+C down 2             98 MMBP.O..BP.OAA.P.O....DDE.CFF.E.CGG.
+D left 3             97 MMBP.O..BP.OAA.P.O.DD...E.CFF.E.CGG.
+P down 1             97 MMB..O..BP.OAA.P.O.DDP..E.CFF.E.CGG.
+O down 3             97 MMB.....BP..AA.P...DDP.OE.CFFOE.CGGO
+B down 1             99 MM......BP..AABP...DDP.OE.CFFOE.CGGO
+M right 4             96 ....MM..BP..AABP...DDP.OE.CFFOE.CGGO
+B up 1             98 ..B.MM..BP..AA.P...DDP.OE.CFFOE.CGGO
+A right 1             99 ..B.MM..BP...AAP...DDP.OE.CFFOE.CGGO
+E up 4             96 E.B.MME.BP...AAP...DDP.O..CFFO..CGGO
+D left 1             96 E.B.MME.BP...AAP..DD.P.O..CFFO..CGGO
+A left 1             98 E.B.MME.BP..AA.P..DD.P.O..CFFO..CGGO
+C up 2             96 E.B.MME.BP..AACP..DDCP.O...FFO...GGO
+G left 2             96 E.B.MME.BP..AACP..DDCP.O...FFO.GG..O
+F left 3             95 E.B.MME.BP..AACP..DDCP.OFF...O.GG..O
+P down 2             95 E.B.MME.B...AAC...DDCP.OFF.P.O.GGP.O
+C down 1             95 E.B.MME.B...AA....DDCP.OFFCP.O.GGP.O
+A right 4             94 E.B.MME.B.......AADDCP.OFFCP.O.GGP.O
+
+E.B.MM
+E.B...
+....AA
+DDCP.O
+FFCP.O
+.GGP.O

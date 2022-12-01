@@ -1,0 +1,28 @@
+Initial board configuration: ..MMO....BOP.AABOP.....PC..QQQC.....
+
+..MMO.
+...BOP
+.AABOP
+.....P
+C..QQQ
+C.....
+
+Car fuel available: {'M': 100, 'O': 100, 'B': 100, 'P': 100, 'A': 100, 'C': 100, 'Q': 100}
+Runtime: 4.1123s 
+Search path length: 3592 states
+Solution path length: 6 moves
+Solution path: C up 2; Q left 3; P down 2; B down 2; O down 3; A right 3; 
+
+C up 2             98 ..MMO....BOPCAABOPC....P...QQQ......
+Q left 3             97 ..MMO....BOPCAABOPC....PQQQ.........
+P down 2             98 ..MMO....BO.CAABO.C....PQQQ..P.....P
+B down 2             98 ..MMO.....O.CAA.O.C..B.PQQQB.P.....P
+O down 3             97 ..MM........CAA...C..BOPQQQBOP....OP
+A right 3             97 ..MM........C...AAC..BOPQQQBOP....OP
+
+..MM..
+......
+C...AA
+C..BOP
+QQQBOP
+....OP

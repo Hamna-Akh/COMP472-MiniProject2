@@ -1,0 +1,35 @@
+Initial board configuration: OPMBCCOPMBDDOPAAEF..G.EF..GHHI.....I
+
+OPMBCC
+OPMBDD
+OPAAEF
+..G.EF
+..GHHI
+.....I
+
+Car fuel available: {'O': 100, 'P': 100, 'M': 100, 'B': 100, 'C': 100, 'D': 100, 'A': 100, 'E': 100, 'F': 100, 'G': 100, 'H': 100, 'I': 100}
+Runtime: 1.9746s 
+Search path length: 3208 states
+Solution path length: 13 moves
+Solution path: G down 1; P down 3; O down 3; A left 2; B down 2; M down 2; D left 4; C left 4; F up 2; E up 2; B up 2; M up 2; A right 4; 
+
+G down 1             99 OPMBCCOPMBDDOPAAEF....EF..GHHI..G..I
+P down 3             97 O.MBCCO.MBDDO.AAEF.P..EF.PGHHI.PG..I
+O down 3             97 ..MBCC..MBDD..AAEFOP..EFOPGHHIOPG..I
+A left 2             98 ..MBCC..MBDDAA..EFOP..EFOPGHHIOPG..I
+B down 2             98 ..M.CC..M.DDAA.BEFOP.BEFOPGHHIOPG..I
+M down 2             98 ....CC....DDAAMBEFOPMBEFOPGHHIOPG..I
+D left 4             96 ....CCDD....AAMBEFOPMBEFOPGHHIOPG..I
+C left 4             96 CC....DD....AAMBEFOPMBEFOPGHHIOPG..I
+F up 2             98 CC...FDD...FAAMBE.OPMBE.OPGHHIOPG..I
+E up 2             98 CC..EFDD..EFAAMB..OPMB..OPGHHIOPG..I
+B up 2             96 CC.BEFDD.BEFAAM...OPM...OPGHHIOPG..I
+M up 2             96 CCMBEFDDMBEFAA....OP....OPGHHIOPG..I
+A right 4             94 CCMBEFDDMBEF....AAOP....OPGHHIOPG..I
+
+CCMBEF
+DDMBEF
+....AA
+OP....
+OPGHHI
+OPG..I
