@@ -377,7 +377,7 @@ class UCSSearchTree:
 
 class AlgorithmANode:
     """
-    AlgorithmANode are the nodes used by AlgorithmASearchTree to build a Alogrithm A/A* search space for the puzzle.
+    AlgorithmANode are the nodes used by AlgorithmASearchTree to build a algorithm A/A* search space for the puzzle.
     """
     def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
         self.string_puzzle = string_puzzle
@@ -391,6 +391,10 @@ class AlgorithmANode:
         self.g = g  # actual path cost to current node
         self.h = h  # predicted cost to goal (heuristic)
         self.f = g + h
+
+    def set_h(self, h):
+        self.h = h
+        self.f = self.g + h
 
     def set_children(self, children):
         self.children = children
@@ -418,12 +422,12 @@ class AlgorithmASearchTree:
         Cost of solution (None if no solution)
     """
     
-    def alogrithm_A(self):
+    def algorithm_A(self, heuristic):
         # initialize output files
         current_directory = os.path.dirname(os.path.realpath(__file__))
         output_directory = "outputs"
-        search_filename = "a-h1-search-" + str(self.id) + ".txt"
-        solution_filename = "a-h1-sol-" + str(self.id) + ".txt"
+        search_filename = "a-h" + str(heuristic) + "-search-" + str(self.id) + ".txt"
+        solution_filename = "a-h" + str(heuristic) + "-sol-" + str(self.id) + ".txt"
         search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
         solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
 
@@ -465,11 +469,11 @@ class AlgorithmASearchTree:
                 break
             else:
                 # removes this node from the open list if list contains another similar state of lower or same cost
-                if self.has_lower_cost_in_open_alogirthm_A(self.open[0]):
+                if self.has_lower_cost_in_open_algorithm_A(self.open[0]):
                     self.open.pop(0)
                     continue
 
-                children = self.generate_all_children_alogrithm_A(self.open[0]) # generate all unvisited children
+                children = self.generate_all_children_algorithm_A(self.open[0], heuristic) # generate all unvisited children
 
                 # add children to visit to open
                 for child in children:
@@ -495,7 +499,7 @@ class AlgorithmASearchTree:
         solution_file.close() 
         return [len(self.solution_path), len(self.closed), execution_time, cost_of_solution]
 
-    def generate_all_children_alogrithm_A(self, node: AlgorithmANode):
+    def generate_all_children_algorithm_A(self, node: AlgorithmANode, heuristic):
         children = []
         for car in self.puzzle.cars:
             for action in self.ACTIONS:
@@ -505,7 +509,19 @@ class AlgorithmASearchTree:
                     if child == None: break # changes action for car if move is not valid
                     # adds new children (cost is always +1 no matter the distance)
                     # no heuristic in ucs (h = 0)
-                    child_node = AlgorithmANode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
+                    child_node = AlgorithmANode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0) ### ADD H(N)
+
+                    # calculating h value
+                    h_value = 0
+                    if heuristic == 1:
+                        h_value = self.h1_blocked_vehicles(child_node)
+                    elif heuristic == 2:
+                        h_value = self.h2_blocked_positions(child_node)
+                    elif heuristic == 3:
+                        h_value = self.h3_multiplier_blocked_vehicles(child_node)
+                    elif heuristic == 4:
+                        h_value = self.h4_multiplier_blocked_positions(child_node)
+                    child_node.set_h(h_value)
 
                     is_parent_node = (child_node.string_puzzle == node.string_puzzle)
                     has_been_visited = (child_node.string_puzzle in self.visited)
@@ -516,7 +532,7 @@ class AlgorithmASearchTree:
         node.set_children(children)
         return children
 
-    def has_lower_cost_in_open_alogirthm_A(self, node: AlgorithmANode):
+    def has_lower_cost_in_open_algorithm_A(self, node: AlgorithmANode):
         skip_first = True
         for open_node in self.open:
             # skips the first place (since this method is called from the first node in open always)
@@ -528,84 +544,56 @@ class AlgorithmASearchTree:
                 return True
         return False
     
-    def h1_blocked_vehicles(self, board=None):
-        if board is None:
-            board = self.board
-        
-        list_index = 0
-        a_coordinates = self.get_car_coordinates('A', board) # get coordinates of Ambulance (A)
+    def h1_blocked_vehicles(self, node: AlgorithmANode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
         blocked_cars = [] # initialize empty list of blocked cars
         
-        for y in range(0, 6):
-            for x in range(0, 6):
-                self.board[x][y] = self.string_puzzle[list_index]
-                for x in range(blocked_pointer, 6):
-                    if (self.string_puzzle[blocked_pointer] not in blocked_cars) and (self.string_puzzle[blocked_pointer] != "."):
-                        blocked_cars.append(self.string_puzzle[blocked_pointer]) # add blocked car to blocked car list
-                    blocked_pointer += 1 # move blocked pointer to the right
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position not in blocked_cars) and (position != "."): 
+                blocked_cars.append(position)
         return len(blocked_cars)
 
-    def h2_blocked_positions(self, board=None):
-        if board is None:
-            board = self.board
-        
-        list_index = 0
-        a_coordinates = self.get_car_coordinates('A', board) # get coordinates of Ambulance (A)
+    def h2_blocked_positions(self, node: AlgorithmANode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
-        blocked_counter = 0 # initialize block counter for blocked positions
+        blocked_positions = [] # initialize empty list of blocked positions
         
-        for y in range(0, 6):
-            for x in range(0, 6):
-                self.board[x][y] = self.string_puzzle[list_index]
-                for x in range(blocked_pointer, 6):
-                    if (self.string_puzzle[blocked_pointer] not in self.cars) and (self.string_puzzle[blocked_pointer] != "."):
-                        blocked_counter += 1
-                    blocked_pointer += 1 # move blocked pointer to the right
-        return blocked_counter
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position != "."): 
+                blocked_positions.append(position)
+        return len(blocked_positions)
     
-    def h3_multiplier_blocked_vehicles(self, board=None):
-        if board is None:
-            board = self.board
-        
-        list_index = 0
-        a_coordinates = self.get_car_coordinates('A', board) # get coordinates of Ambulance (A)
+    def h3_multiplier_blocked_vehicles(self, node: AlgorithmANode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
         blocked_cars = [] # initialize empty list of blocked cars
         
-        for y in range(0, 6):
-            for x in range(0, 6):
-                self.board[x][y] = self.string_puzzle[list_index]
-                for x in range(blocked_pointer, 6):
-                    if (self.string_puzzle[blocked_pointer] not in blocked_cars) and (self.string_puzzle[blocked_pointer] != "."):
-                        blocked_cars.append(self.string_puzzle[blocked_pointer]) # add blocked car to blocked car list
-                    blocked_pointer += 1 # move blocked pointer to the right
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position not in blocked_cars) and (position != "."): 
+                blocked_cars.append(position)
         return 2 * len(blocked_cars)
 
-    def h4_multiplier_blocked_positions(self, board=None):
-        if board is None:
-            board = self.board
-        
-        list_index = 0
-        a_coordinates = self.get_car_coordinates('A', board) # get coordinates of Ambulance (A)
+    def h4_multiplier_blocked_positions(self, node: AlgorithmANode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
-        blocked_counter = 0 # initialize block counter for blocked positions
+        blocked_positions = [] # initialize empty list of blocked positions
         
-        for y in range(0, 6):
-            for x in range(0, 6):
-                self.board[x][y] = self.string_puzzle[list_index]
-                for x in range(blocked_pointer, 6):
-                    if (self.string_puzzle[blocked_pointer] not in self.cars) and (self.string_puzzle[blocked_pointer] != "."):
-                        blocked_counter += 1
-                    blocked_pointer += 1 # move blocked pointer to the right
-        return 3 * blocked_counter
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position != "."): 
+                blocked_positions.append(position)
+        return 3 * len(blocked_positions)
 
-    def run_algorithm_A(self):
-        return self.alogrithm_A()
+    def run_algorithm_A(self, heuristic):
+        return self.algorithm_A(heuristic)
 
 # Runner
 if __name__ == '__main__':
@@ -632,11 +620,20 @@ if __name__ == '__main__':
 
                 ### WRITE YOUR ALGORITHM HERE SIMILAR TO THE UCS ABOVE (don't forget to write data to csv file)
                 algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
-                algorithm_a_results = algorithm_a_search.run_algorithm_A()
-                algorithm_a_data = [puzzle_counter, "Algorithm A", "N/A"] + algorithm_a_results
-                writer.writerow(algorithm_a_data)
+                algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1)
+                algorithm_a_h1_data = [puzzle_counter, "Algorithm A", "h1"] + algorithm_a_h1_results
+                algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2)
+                algorithm_a_h2_data = [puzzle_counter, "Algorithm A", "h2"] + algorithm_a_h2_results
+                # algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3)
+                # algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
+                # algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
+                # algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
+                writer.writerow(algorithm_a_h1_data)
+                writer.writerow(algorithm_a_h2_data)
+                # writer.writerow(algorithm_a_h3_data)
+                # writer.writerow(algorithm_a_h4_data)
             except ValueError:
                 print("Puzzle #" + str(puzzle_counter) + " is not configured properly")
-            except Exception as e: print(e)
+            # except Exception as e: print(e)
             puzzle_counter += 1
     analysis_file.close()
