@@ -375,12 +375,38 @@ class UCSSearchTree:
     def run(self):
         return self.uniform_cost_search()
 
+class BlockingCarsHeuristic:
+    """Calculate number of cars blocking the way"""
+    
+    def calculate(self, board):    
+        if board is None:
+            board = self.board
+        # get coordinates of Ambulance (A)
+        a_coordinates = self.get_car_coordinates('A', board)
+        x_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        if (x_coordinate == 5): return 0
+        else: 
+        
+        # car_coordinates = self.get_car_coordinates(car, board)    
+        # is_vertical = all([True if coordinate[0] == car_coordinates[0][0] else False for coordinate in car_coordinates]) # check if car is vertical
+ 
+            blockingcars = 1
+            for car in board.cars:
+                # if car.get_car_coordinates == car is vertical and car x cord > ambulance x coord
+                if car.get_car_coordinates > x_coordinate :
+                    blockingcars += 1
+            return blockingcars
+
+    def __repr__(self):
+        return 'BlockingCarsHeuristic'
+
 # Runner
 if __name__ == '__main__':
     # 2.2 Dealing with input file
     puzzles_file = open('sample-input.txt', 'r')
     # puzzles_file = open('puzzles.txt', 'r') # Full 50 puzzles file
     lines = [line.strip() for line in puzzles_file.readlines() if line.strip()] # Removes empty lines
+    RushHour.print_board
     puzzles_file.close()
 
     # Setting up csv file for data analysis
