@@ -422,8 +422,8 @@ class AlgorithmASearchTree:
         # initialize output files
         current_directory = os.path.dirname(os.path.realpath(__file__))
         output_directory = "outputs"
-        search_filename = "alogrithm-A-h1-search-" + str(self.id) + ".txt"
-        solution_filename = "algorithm-A-h1-sol-" + str(self.id) + ".txt"
+        search_filename = "a-h1-search-" + str(self.id) + ".txt"
+        solution_filename = "a-h1-sol-" + str(self.id) + ".txt"
         search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
         solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
 
