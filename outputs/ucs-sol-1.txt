@@ -7,11 +7,11 @@ OOOHG.
 I..H..
 I.....
 
-Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'D': 100, 'E': 100, 'F': 100, 'A': 100, 'G': 100, 'O': 100, 'H': 100, 'I': 100}
-Runtime: 22.0204s 
-Search path length: 15404 states
-Solution path length: 16 moves
-Solution path: H down 1; G down 2; D down 4; O right 3; E down 2; C down 1; B right 2; F up 1; A right 2; M down 3; A left 1; F down 1; B left 3; F up 1; C up 1; A right 3; 
+Car fuel available: {'B': 100, 'I': 100, 'J': 100, 'C': 100, 'A': 100, 'M': 100, 'G': 100, 'D': 100, 'K': 100, 'H': 100, 'L': 100, 'F': 100}
+Runtime: 0.0024s 
+Search path length: 6 states
+Solution path length: 2 moves
+Solution path: M down 1; A right 1; 
 
 H down 1             99 .MBBCD.MEFCDAAEFG.OOO.G.I..H..I..H..
 G down 2             98 .MBBCD.MEFCDAAEF..OOO...I..HG.I..HG.
