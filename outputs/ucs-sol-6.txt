@@ -7,11 +7,11 @@ MMBBCO
 .P.F..
 .P.FGG
 
-Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'O': 100, 'A': 100, 'D': 100, 'P': 100, 'E': 100, 'F': 100, 'G': 100}
-Runtime: 0.4057s 
-Search path length: 1124 states
-Solution path length: 18 moves
-Solution path: D down 1; A right 1; O down 2; C down 1; B right 2; M right 2; P up 3; E left 2; F up 1; G left 3; F down 1; E right 2; P down 1; O down 1; M left 2; B left 2; C up 1; A right 2; 
+Car fuel available: {'B': 100, 'G': 100, 'H': 100, 'E': 100, 'A': 100, 'I': 100, 'F': 100, 'C': 100, 'D': 100}
+Runtime: 0.5641s 
+Search path length: 1518 states
+Solution path length: 32 moves
+Solution path: I down 1; H down 1; B right 1; E up 1; A left 1; F up 2; D right 3; F down 2; A right 1; E down 4; A left 1; B left 1; F up 3; C left 3; F down 3; G down 1; B right 4; F up 3; G up 1; C right 3; F down 3; A right 1; E up 4; A left 1; F up 3; D left 3; C left 3; F down 3; G down 3; B left 1; H up 1; A right 4; 
 
 D down 1             99 MMBBCO....CO.AA..O.PEED..P.FD..P.FGG
 A right 1             99 MMBBCO....CO..AA.O.PEED..P.FD..P.FGG
