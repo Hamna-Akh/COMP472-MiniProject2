@@ -375,6 +375,225 @@ class UCSSearchTree:
     def run(self):
         return self.uniform_cost_search()
 
+class GBFSNode:
+    """
+    GBFSNode are the nodes used by GBFSSearchTree to build a GBFS search space for the puzzle.
+    """
+    def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
+        self.string_puzzle = string_puzzle
+        self.board = board
+        self.fuel = fuel
+        self.parent = parent
+        self.children = []
+        self.car = car
+        self.action = action
+        self.moves = moves
+        self.g = g  # actual path cost to current node
+        self.h = h  # predicted cost to goal (heuristic)
+        self.f = g + h
+
+    def set_h(self, h):
+        self.h = h
+
+    def set_children(self, children):
+        self.children = children
+
+class GBFSSearchTree:
+
+    ACTIONS = ['up', 'right', 'down', 'left']
+
+    def __init__(self, initial_state, puzzle_number):
+        self.id = puzzle_number
+        self.puzzle = RushHour(initial_state) # create puzzle instance
+        self.root = GBFSNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
+        self.open = [self.root] # list of open nodes
+        self.closed = [] # list of closed nodes
+        self.visited = [] # list of visited puzzle strings states (for easier search)
+        self.solution_path = [] # list of nodes in the solution path
+
+    """
+    Searches for puzzle solution with the GBFS search.
+    Writes solution (if any) to solution file and search path to search file.
+    Returns (as a list):
+        Length of the solution (0 if no solution)
+        Length of the Search Path
+        Execution Time
+        Cost of solution (None if no solution)
+    """
+    
+    def GBFS(self, heuristic):
+        # initialize output files
+        current_directory = os.path.dirname(os.path.realpath(__file__))
+        output_directory = "outputs"
+        search_filename = "GBFS-h" + str(heuristic) + "-search-" + str(self.id) + ".txt"
+        solution_filename = "GBFS-h" + str(heuristic) + "-sol-" + str(self.id) + ".txt"
+        search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
+        solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
+
+        start = time.time()
+        execution_time = 0
+        cost_of_solution = None
+
+        while True:
+            if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
+                solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
+                solution_file.write(self.puzzle.stringify_board() + "\n")
+                solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
+                execution_time = round(time.time() - start, 4)
+                solution_file.write(F'Runtime: {execution_time}s \n')
+                current_node = self.open[0]
+                search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
+                
+                # compute solution path
+                while True:
+                    self.solution_path.append(current_node)
+                    if current_node.parent == None: break
+                    else: current_node = current_node.parent
+                self.solution_path.reverse()
+                self.solution_path.pop(0) # removes root node from solution path
+                
+                cost_of_solution = self.solution_path[-1].g
+
+                # write solutions to file
+                solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
+                solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
+                solution_file.write("Solution path: ")
+                for node in self.solution_path:
+                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
+                solution_file.write("\n\n")
+                for node in self.solution_path:
+                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
+                solution_file.write("\n")
+                solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
+                break
+            else:
+                # removes this node from the open list if list contains another similar state of lower or same cost
+                if self.has_lower_cost_in_open_GBFS(self.open[0]):
+                    self.open.pop(0)
+                    continue
+
+                children = self.generate_all_children_GBFS(self.open[0], heuristic) # generate all unvisited children
+
+                # add children to visit to open
+                for child in children:
+                    self.open.append(child)
+
+                # sort open by lowest h 
+                self.open.sort(key=attrgetter('h'))
+
+                # close current node
+                visited_node = self.open.pop(0)
+                self.closed.append(visited_node)
+                self.visited.append(visited_node.string_puzzle)
+
+                # add searched node to search file
+                current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
+                search_file.write(current_search + "\n")
+
+                if len(self.open) == 0: # no solution can be found
+                    execution_time = round(time.time() - start, 4)
+                    solution_file.write("no solution")
+                    break
+        search_file.close()
+        solution_file.close() 
+        return [len(self.solution_path), len(self.closed), execution_time, cost_of_solution]
+
+    def generate_all_children_GBFS(self, node: GBFSNode, heuristic):
+        children = []
+        for car in self.puzzle.cars:
+            for action in self.ACTIONS:
+                move_counter = 1
+                while True:
+                    child = self.puzzle.preview_action(car, action, move_counter, node.fuel, node.board)
+                    if child == None: break # changes action for car if move is not valid
+                    # adds new children (cost is always +1 no matter the distance)
+                    # no heuristic in ucs (h = 0)
+                    child_node = GBFSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0) 
+
+                    # calculating h value
+                    h_value = 0
+                    if heuristic == 1:
+                        h_value = self.h1_blocked_vehicles(child_node)
+                    elif heuristic == 2:
+                        h_value = self.h2_blocked_positions(child_node)
+                    elif heuristic == 3:
+                        h_value = self.h3_multiplier_blocked_vehicles(child_node)
+                    elif heuristic == 4:
+                        h_value = self.h4_multiplier_blocked_positions(child_node)
+                    child_node.set_h(h_value)
+
+                    is_parent_node = (child_node.string_puzzle == node.string_puzzle)
+                    has_been_visited = (child_node.string_puzzle in self.visited)
+                    if ((not is_parent_node) and # do not append parent
+                        (not has_been_visited)): # has not already been visited
+                        children.append(child_node) 
+                    move_counter += 1
+        node.set_children(children)
+        return children
+
+    def has_lower_cost_in_open_GBFS(self, node: GBFSNode):
+        skip_first = True
+        for open_node in self.open:
+            # skips the first place (since this method is called from the first node in open always)
+            # don't want to compare it to itself
+            if skip_first:
+                skip_first = False
+                continue
+            if (open_node.string_puzzle == node.string_puzzle) and (open_node.h <= node.h):
+                return True
+        return False
+    
+    def h1_blocked_vehicles(self, node: GBFSNode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
+        max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
+        blocked_cars = [] # initialize empty list of blocked cars
+        
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position not in blocked_cars) and (position != "."): 
+                blocked_cars.append(position)
+        return len(blocked_cars)
+
+    def h2_blocked_positions(self, node: GBFSNode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
+        max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
+        blocked_positions = [] # initialize empty list of blocked positions
+        
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position != "."): 
+                blocked_positions.append(position)
+        return len(blocked_positions)
+    
+    def h3_multiplier_blocked_vehicles(self, node: GBFSNode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
+        max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
+        blocked_cars = [] # initialize empty list of blocked cars
+        
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position not in blocked_cars) and (position != "."): 
+                blocked_cars.append(position)
+        return 2 * len(blocked_cars)
+
+    def h4_multiplier_blocked_positions(self, node: GBFSNode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
+        max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
+        blocked_positions = [] # initialize empty list of blocked positions
+        
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position != "."): 
+                blocked_positions.append(position)
+        return 3 * len(blocked_positions)
+
+    def run_GBFS(self, heuristic):
+        return self.GBFS(heuristic)
+
 class AlgorithmANode:
     """
     AlgorithmANode are the nodes used by AlgorithmASearchTree to build a algorithm A/A* search space for the puzzle.
@@ -509,7 +728,7 @@ class AlgorithmASearchTree:
                     if child == None: break # changes action for car if move is not valid
                     # adds new children (cost is always +1 no matter the distance)
                     # no heuristic in ucs (h = 0)
-                    child_node = AlgorithmANode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0) ### ADD H(N)
+                    child_node = AlgorithmANode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0) 
 
                     # calculating h value
                     h_value = 0
@@ -614,23 +833,38 @@ if __name__ == '__main__':
     for line in lines:
         if not line.startswith('#'): # skips over comment lines
             try:
-                ucs_search = UCSSearchTree(line.split(), puzzle_counter)
-                ucs_results = ucs_search.run()
-                ucs_data = [puzzle_counter, "UCS", "N/A"] + ucs_results
-                writer.writerow(ucs_data)
+                # ucs_search = UCSSearchTree(line.split(), puzzle_counter)
+                # ucs_results = ucs_search.run()
+                # ucs_data = [puzzle_counter, "UCS", "N/A"] + ucs_results
+                # writer.writerow(ucs_data)
+
+                #GBFS
+                GBFS_search = GBFSSearchTree(line.split(), puzzle_counter)
+                GBFS_h1_results = GBFS_search.run_GBFS(1)
+                GBFS_h1_data = [puzzle_counter, "GBFS", "h1"] + GBFS_h1_results
+                GBFS_h2_results = GBFS_search.run_GBFS(2)
+                GBFS_h2_data = [puzzle_counter, "GBFS", "h2"] + GBFS_h2_results
+                GBFS_h3_results = GBFS_search.run_GBFS(3)
+                GBFS_h3_data = [puzzle_counter, "GBFS", "h3"] + GBFS_h3_results
+                GBFS_h4_results = GBFS_search.run_GBFS(4)
+                GBFS_h4_data = [puzzle_counter, "GBFS", "h4"] + GBFS_h4_results
+                writer.writerow(GBFS_h1_data)
+                writer.writerow(GBFS_h2_data)
+                writer.writerow(GBFS_h3_data)
+                writer.writerow(GBFS_h4_data)
 
                 ### WRITE YOUR ALGORITHM HERE SIMILAR TO THE UCS ABOVE (don't forget to write data to csv file)
-                algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
-                algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1)
-                algorithm_a_h1_data = [puzzle_counter, "Algorithm A", "h1"] + algorithm_a_h1_results
-                algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2)
-                algorithm_a_h2_data = [puzzle_counter, "Algorithm A", "h2"] + algorithm_a_h2_results
+                # algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
+                # algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1)
+                # algorithm_a_h1_data = [puzzle_counter, "Algorithm A", "h1"] + algorithm_a_h1_results
+                # algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2)
+                # algorithm_a_h2_data = [puzzle_counter, "Algorithm A", "h2"] + algorithm_a_h2_results
                 # algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3)
                 # algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
                 # algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
                 # algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
-                writer.writerow(algorithm_a_h1_data)
-                writer.writerow(algorithm_a_h2_data)
+                # writer.writerow(algorithm_a_h1_data)
+                # writer.writerow(algorithm_a_h2_data)
                 # writer.writerow(algorithm_a_h3_data)
                 # writer.writerow(algorithm_a_h4_data)
             except ValueError:
