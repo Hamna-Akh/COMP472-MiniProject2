@@ -220,9 +220,9 @@ class RushHour:
         else:
             return None
 
-class UCSNode:
+class SearchNode:
     """
-    UCSNodes are the nodes used by UCSSearchTree to build a UCS search space for the puzzle.
+    SearchNodes are the nodes used by UCSSearchTree to build a UCS search space for the puzzle.
     """
     def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
         self.string_puzzle = string_puzzle
@@ -236,6 +236,10 @@ class UCSNode:
         self.g = g  # actual path cost to current node
         self.h = h  # predicted cost to goal (heuristic)
         self.f = g + h
+    
+    def set_h(self, h):
+        self.h = h
+        self.f = self.g + h
 
     def set_children(self, children):
         self.children = children
@@ -247,7 +251,7 @@ class UCSSearchTree:
     def __init__(self, initial_state, puzzle_number):
         self.id = puzzle_number
         self.puzzle = RushHour(initial_state) # create puzzle instance
-        self.root = UCSNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
+        self.root = SearchNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
         self.open = [self.root] # list of open nodes
         self.closed = [] # list of closed nodes
         self.visited = [] # list of visited puzzle strings states (for easier search)
@@ -339,7 +343,7 @@ class UCSSearchTree:
         solution_file.close() 
         return [len(self.solution_path), len(self.closed), execution_time]
 
-    def generate_all_children_ucs(self, node: UCSNode):
+    def generate_all_children_ucs(self, node: SearchNode):
         children = []
         for car in self.puzzle.cars:
             for action in self.ACTIONS:
@@ -349,7 +353,7 @@ class UCSSearchTree:
                     if child == None: break # changes action for car if move is not valid
                     # adds new children (cost is always +1 no matter the distance)
                     # no heuristic in ucs (h = 0)
-                    child_node = UCSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
+                    child_node = SearchNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
 
                     is_parent_node = (child_node.string_puzzle == node.string_puzzle)
                     has_been_visited = (child_node.string_puzzle in self.visited)
@@ -360,7 +364,7 @@ class UCSSearchTree:
         node.set_children(children)
         return children
     
-    def has_lower_cost_in_open(self, node: UCSNode):
+    def has_lower_cost_in_open(self, node: SearchNode):
         skip_first = True
         for open_node in self.open:
             # skips the first place (since this method is called from the first node in open always)
@@ -375,29 +379,6 @@ class UCSSearchTree:
     def run(self):
         return self.uniform_cost_search()
 
-class GBFSNode:
-    """
-    GBFSNode are the nodes used by GBFSSearchTree to build a GBFS search space for the puzzle.
-    """
-    def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
-        self.string_puzzle = string_puzzle
-        self.board = board
-        self.fuel = fuel
-        self.parent = parent
-        self.children = []
-        self.car = car
-        self.action = action
-        self.moves = moves
-        self.g = g  # actual path cost to current node
-        self.h = h  # predicted cost to goal (heuristic)
-        self.f = g + h
-
-    def set_h(self, h):
-        self.h = h
-
-    def set_children(self, children):
-        self.children = children
-
 class GBFSSearchTree:
 
     ACTIONS = ['up', 'right', 'down', 'left']
@@ -405,7 +386,7 @@ class GBFSSearchTree:
     def __init__(self, initial_state, puzzle_number):
         self.id = puzzle_number
         self.puzzle = RushHour(initial_state) # create puzzle instance
-        self.root = GBFSNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
+        self.root = SearchNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
         self.open = [self.root] # list of open nodes
         self.closed = [] # list of closed nodes
         self.visited = [] # list of visited puzzle strings states (for easier search)
@@ -500,7 +481,7 @@ class GBFSSearchTree:
         solution_file.close() 
         return [len(self.solution_path), len(self.closed), execution_time]
 
-    def generate_all_children_GBFS(self, node: GBFSNode, heuristic):
+    def generate_all_children_GBFS(self, node: SearchNode, heuristic):
         children = []
         for car in self.puzzle.cars:
             for action in self.ACTIONS:
@@ -510,7 +491,7 @@ class GBFSSearchTree:
                     if child == None: break # changes action for car if move is not valid
                     # adds new children (cost is always +1 no matter the distance)
                     # no heuristic in ucs (h = 0)
-                    child_node = GBFSNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0) 
+                    child_node = SearchNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0) 
 
                     # calculating h value
                     h_value = 0
@@ -533,7 +514,7 @@ class GBFSSearchTree:
         node.set_children(children)
         return children
 
-    def is_in_open_GBFS(self, node: GBFSNode):
+    def is_in_open_GBFS(self, node: SearchNode):
         skip_first = True
         for open_node in self.open:
             # skips the first place (since this method is called from the first node in open always)
@@ -545,7 +526,7 @@ class GBFSSearchTree:
                 return True
         return False
     
-    def h1_blocked_vehicles(self, node: GBFSNode):
+    def h1_blocked_vehicles(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -557,7 +538,7 @@ class GBFSSearchTree:
                 blocked_cars.append(position)
         return len(blocked_cars)
 
-    def h2_blocked_positions(self, node: GBFSNode):
+    def h2_blocked_positions(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -569,7 +550,7 @@ class GBFSSearchTree:
                 blocked_positions.append(position)
         return len(blocked_positions)
     
-    def h3_multiplier_blocked_vehicles(self, node: GBFSNode):
+    def h3_multiplier_blocked_vehicles(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -581,7 +562,7 @@ class GBFSSearchTree:
                 blocked_cars.append(position)
         return 2 * len(blocked_cars)
 
-    def h4_open_positions(self, node: GBFSNode):
+    def h4_open_positions(self, node: SearchNode):
             a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
             max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
             blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -602,30 +583,6 @@ class GBFSSearchTree:
         self.__reset__()
         return results
 
-class AlgorithmANode:
-    """
-    AlgorithmANode are the nodes used by AlgorithmASearchTree to build a algorithm A/A* search space for the puzzle.
-    """
-    def __init__(self, string_puzzle, board, fuel, parent, car, action, moves, g, h):
-        self.string_puzzle = string_puzzle
-        self.board = board
-        self.fuel = fuel
-        self.parent = parent
-        self.children = []
-        self.car = car
-        self.action = action
-        self.moves = moves
-        self.g = g  # actual path cost to current node
-        self.h = h  # predicted cost to goal (heuristic)
-        self.f = g + h
-
-    def set_h(self, h):
-        self.h = h
-        self.f = self.g + h
-
-    def set_children(self, children):
-        self.children = children
-
 class AlgorithmASearchTree:
 
     ACTIONS = ['up', 'right', 'down', 'left']
@@ -633,7 +590,7 @@ class AlgorithmASearchTree:
     def __init__(self, initial_state, puzzle_number):
         self.id = puzzle_number
         self.puzzle = RushHour(initial_state) # create puzzle instance
-        self.root = AlgorithmANode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
+        self.root = SearchNode(self.puzzle.string_puzzle, self.puzzle.board, self.puzzle.fuel, None, None, None, None, 0, 0)  # set root node
         self.open = [self.root] # list of open nodes
         self.closed = [] # list of closed nodes
         self.visited = [] # list of visited puzzle strings states (for easier search)
@@ -726,7 +683,7 @@ class AlgorithmASearchTree:
         solution_file.close() 
         return [len(self.solution_path), len(self.closed), execution_time]
 
-    def generate_all_children_algorithm_A(self, node: AlgorithmANode, heuristic):
+    def generate_all_children_algorithm_A(self, node: SearchNode, heuristic):
         children = []
         for car in self.puzzle.cars:
             for action in self.ACTIONS:
@@ -735,7 +692,7 @@ class AlgorithmASearchTree:
                     child = self.puzzle.preview_action(car, action, move_counter, node.fuel, node.board)
                     if child == None: break # changes action for car if move is not valid
                     # adds new children (cost is always +1 no matter the distance)
-                    child_node = AlgorithmANode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
+                    child_node = SearchNode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
 
                     # calculating h value
                     h_value = 0
@@ -758,7 +715,7 @@ class AlgorithmASearchTree:
         node.set_children(children)
         return children
 
-    def has_lower_cost_in_open_algorithm_A(self, node: AlgorithmANode):
+    def has_lower_cost_in_open_algorithm_A(self, node: SearchNode):
         skip_first = True
         for open_node in self.open:
             # skips the first place (since this method is called from the first node in open always)
@@ -770,7 +727,7 @@ class AlgorithmASearchTree:
                 return True
         return False
     
-    def h1_blocked_vehicles(self, node: AlgorithmANode):
+    def h1_blocked_vehicles(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -782,7 +739,7 @@ class AlgorithmASearchTree:
                 blocked_cars.append(position)
         return len(blocked_cars)
 
-    def h2_blocked_positions(self, node: AlgorithmANode):
+    def h2_blocked_positions(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -793,7 +750,7 @@ class AlgorithmASearchTree:
             if (position != "."): blocked_positions.append(position)
         return len(blocked_positions)
     
-    def h3_multiplier_blocked_vehicles(self, node: AlgorithmANode):
+    def h3_multiplier_blocked_vehicles(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -805,7 +762,7 @@ class AlgorithmASearchTree:
                 blocked_cars.append(position)
         return 2 * len(blocked_cars)
 
-    def h4_open_positions(self, node: AlgorithmANode):
+    def h4_open_positions(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
@@ -829,8 +786,8 @@ class AlgorithmASearchTree:
 # Runner
 if __name__ == '__main__':
     # 2.2 Dealing with input file
-    puzzles_file = open('sample-input.txt', 'r')
-    # puzzles_file = open('puzzles.txt', 'r') # Full 50 puzzles file
+    # puzzles_file = open('sample-input.txt', 'r')
+    puzzles_file = open('puzzles.txt', 'r') # Full 50 puzzles file
     lines = [line.strip() for line in puzzles_file.readlines() if line.strip()] # Removes empty lines
     RushHour.print_board
     puzzles_file.close()
@@ -845,12 +802,13 @@ if __name__ == '__main__':
     for line in lines:
         if not line.startswith('#'): # skips over comment lines
             try:
-                # ucs_search = UCSSearchTree(line.split(), puzzle_counter)
-                # ucs_results = ucs_search.run()
-                # ucs_data = [puzzle_counter, "UCS", "N/A"] + ucs_results
-                # writer.writerow(ucs_data)
+                # UCS
+                ucs_search = UCSSearchTree(line.split(), puzzle_counter)
+                ucs_results = ucs_search.run()
+                ucs_data = [puzzle_counter, "UCS", "N/A"] + ucs_results
+                writer.writerow(ucs_data)
 
-                #GBFS
+                # GBFS
                 GBFS_search = GBFSSearchTree(line.split(), puzzle_counter)
                 GBFS_h1_results = GBFS_search.run_GBFS(1)
                 GBFS_h1_data = [puzzle_counter, "GBFS", "h1"] + GBFS_h1_results
@@ -865,19 +823,20 @@ if __name__ == '__main__':
                 writer.writerow(GBFS_h3_data)
                 writer.writerow(GBFS_h4_data)
 
-                # algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
-                # algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1)
-                # algorithm_a_h1_data = [puzzle_counter, "Algorithm A", "h1"] + algorithm_a_h1_results
-                # algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2)
-                # # algorithm_a_h2_data = [puzzle_counter, "Algorithm A", "h2"] + algorithm_a_h2_results
-                # algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3)
-                # algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
-                # algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
-                # algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
-                # writer.writerow(algorithm_a_h1_data)
-                # # writer.writerow(algorithm_a_h2_data)
-                # writer.writerow(algorithm_a_h3_data)
-                # writer.writerow(algorithm_a_h4_data)
+                # A
+                algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
+                algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1)
+                algorithm_a_h1_data = [puzzle_counter, "Algorithm A", "h1"] + algorithm_a_h1_results
+                algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2)
+                algorithm_a_h2_data = [puzzle_counter, "Algorithm A", "h2"] + algorithm_a_h2_results
+                algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3)
+                algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
+                algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
+                algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
+                writer.writerow(algorithm_a_h1_data)
+                writer.writerow(algorithm_a_h2_data)
+                writer.writerow(algorithm_a_h3_data)
+                writer.writerow(algorithm_a_h4_data)
 
             except ValueError:
                 print("Puzzle #" + str(puzzle_counter) + " is not configured properly")
