@@ -260,7 +260,6 @@ class UCSSearchTree:
         Length of the solution (0 if no solution)
         Length of the Search Path
         Execution Time
-        Cost of solution (None if no solution)
     """
     def uniform_cost_search(self):
         # initialize output files
@@ -273,7 +272,6 @@ class UCSSearchTree:
 
         start = time.time()
         execution_time = 0
-        cost_of_solution = None
 
         while True:
             if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
@@ -292,8 +290,6 @@ class UCSSearchTree:
                     else: current_node = current_node.parent
                 self.solution_path.reverse()
                 self.solution_path.pop(0) # removes root node from solution path
-                
-                cost_of_solution = self.solution_path[-1].g
 
                 # write solutions to file
                 solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
@@ -309,8 +305,12 @@ class UCSSearchTree:
                 break
             else:
                 # removes this node from the open list if list contains another similar state of lower or same cost
-                if self.has_lower_cost_in_open(self.open[0]):
+                if self.has_lower_cost_in_open(self.open[0]) or self.open[0].string_puzzle in self.visited:
                     self.open.pop(0)
+                    if len(self.open) == 0: # no solution can be found
+                        execution_time = round(time.time() - start, 4)
+                        solution_file.write("no solution")
+                        break
                     continue
 
                 children = self.generate_all_children_ucs(self.open[0]) # generate all unvisited children
@@ -337,7 +337,7 @@ class UCSSearchTree:
                     break
         search_file.close()
         solution_file.close() 
-        return [len(self.solution_path), len(self.closed), execution_time, cost_of_solution]
+        return [len(self.solution_path), len(self.closed), execution_time]
 
     def generate_all_children_ucs(self, node: UCSNode):
         children = []
@@ -638,7 +638,6 @@ class AlgorithmASearchTree:
         Length of the solution (0 if no solution)
         Length of the Search Path
         Execution Time
-        Cost of solution (None if no solution)
     """
     
     def algorithm_A(self, heuristic):
@@ -652,7 +651,6 @@ class AlgorithmASearchTree:
 
         start = time.time()
         execution_time = 0
-        cost_of_solution = None
 
         while True:
             if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
@@ -671,8 +669,6 @@ class AlgorithmASearchTree:
                     else: current_node = current_node.parent
                 self.solution_path.reverse()
                 self.solution_path.pop(0) # removes root node from solution path
-                
-                cost_of_solution = self.solution_path[-1].g
 
                 # write solutions to file
                 solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
@@ -688,8 +684,12 @@ class AlgorithmASearchTree:
                 break
             else:
                 # removes this node from the open list if list contains another similar state of lower or same cost
-                if self.has_lower_cost_in_open_algorithm_A(self.open[0]):
+                if self.has_lower_cost_in_open_algorithm_A(self.open[0]) or (self.open[0].string_puzzle in self.visited):
                     self.open.pop(0)
+                    if len(self.open) == 0: # no solution can be found
+                        execution_time = round(time.time() - start, 4)
+                        solution_file.write("no solution")
+                        break
                     continue
 
                 children = self.generate_all_children_algorithm_A(self.open[0], heuristic) # generate all unvisited children
@@ -698,7 +698,7 @@ class AlgorithmASearchTree:
                 for child in children:
                     self.open.append(child)
 
-                # sort open by lowest f (same as g in this case)
+                # sort open by lowest f
                 self.open.sort(key=attrgetter('f'))
 
                 # close current node
@@ -716,7 +716,7 @@ class AlgorithmASearchTree:
                     break
         search_file.close()
         solution_file.close() 
-        return [len(self.solution_path), len(self.closed), execution_time, cost_of_solution]
+        return [len(self.solution_path), len(self.closed), execution_time]
 
     def generate_all_children_algorithm_A(self, node: AlgorithmANode, heuristic):
         children = []
@@ -727,8 +727,7 @@ class AlgorithmASearchTree:
                     child = self.puzzle.preview_action(car, action, move_counter, node.fuel, node.board)
                     if child == None: break # changes action for car if move is not valid
                     # adds new children (cost is always +1 no matter the distance)
-                    # no heuristic in ucs (h = 0)
-                    child_node = AlgorithmANode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0) 
+                    child_node = AlgorithmANode(child[0], child[1], child[2], node, car, action, move_counter, (node.g + 1), 0)
 
                     # calculating h value
                     h_value = 0
@@ -739,13 +738,13 @@ class AlgorithmASearchTree:
                     elif heuristic == 3:
                         h_value = self.h3_multiplier_blocked_vehicles(child_node)
                     elif heuristic == 4:
-                        h_value = self.h4_multiplier_blocked_positions(child_node)
+                        h_value = self.h4_open_positions(child_node)
                     child_node.set_h(h_value)
 
                     is_parent_node = (child_node.string_puzzle == node.string_puzzle)
                     has_been_visited = (child_node.string_puzzle in self.visited)
-                    if ((not is_parent_node) and # do not append parent
-                        (not has_been_visited)): # has not already been visited
+
+                    if not is_parent_node and not has_been_visited:
                         children.append(child_node) 
                     move_counter += 1
         node.set_children(children)
@@ -783,8 +782,7 @@ class AlgorithmASearchTree:
         
         for x in range(blocked_pointer, 6):
             position = node.board[x][2]
-            if (position != "."): 
-                blocked_positions.append(position)
+            if (position != "."): blocked_positions.append(position)
         return len(blocked_positions)
     
     def h3_multiplier_blocked_vehicles(self, node: AlgorithmANode):
@@ -799,20 +797,26 @@ class AlgorithmASearchTree:
                 blocked_cars.append(position)
         return 2 * len(blocked_cars)
 
-    def h4_multiplier_blocked_positions(self, node: AlgorithmANode):
+    def h4_open_positions(self, node: AlgorithmANode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
-        blocked_positions = [] # initialize empty list of blocked positions
-        
+        open_counter = 0
         for x in range(blocked_pointer, 6):
             position = node.board[x][2]
-            if (position != "."): 
-                blocked_positions.append(position)
-        return 3 * len(blocked_positions)
+            if (position == "."): open_counter += 1
+        return open_counter
+    
+    def __reset__(self):
+        self.open = [self.root]
+        self.closed = []
+        self.visited = []
+        self.solution_path = []
 
     def run_algorithm_A(self, heuristic):
-        return self.algorithm_A(heuristic)
+        results = self.algorithm_A(heuristic)
+        self.__reset__()
+        return results
 
 # Runner
 if __name__ == '__main__':
@@ -824,7 +828,7 @@ if __name__ == '__main__':
     puzzles_file.close()
 
     # Setting up csv file for data analysis
-    analysis_header = ["Puzzle Number", "Algorithm", "Heuristic", "Length of the Solution", "Length of the Search Path", "Execution Time (in seconds)", "Cost of Solution"]
+    analysis_header = ["Puzzle Number", "Algorithm", "Heuristic", "Length of the Solution", "Length of the Search Path", "Execution Time (in seconds)"]
     analysis_file = open('analysis.csv', 'w', encoding='UTF8', newline='')
     writer = csv.writer(analysis_file)
     writer.writerow(analysis_header)
@@ -853,22 +857,22 @@ if __name__ == '__main__':
                 writer.writerow(GBFS_h3_data)
                 writer.writerow(GBFS_h4_data)
 
-                ### WRITE YOUR ALGORITHM HERE SIMILAR TO THE UCS ABOVE (don't forget to write data to csv file)
                 # algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
                 # algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1)
                 # algorithm_a_h1_data = [puzzle_counter, "Algorithm A", "h1"] + algorithm_a_h1_results
                 # algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2)
                 # algorithm_a_h2_data = [puzzle_counter, "Algorithm A", "h2"] + algorithm_a_h2_results
-                # algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3)
-                # algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
-                # algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
-                # algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
+                algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3)
+                algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
+                algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
+                algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
                 # writer.writerow(algorithm_a_h1_data)
                 # writer.writerow(algorithm_a_h2_data)
-                # writer.writerow(algorithm_a_h3_data)
-                # writer.writerow(algorithm_a_h4_data)
+                writer.writerow(algorithm_a_h3_data)
+                writer.writerow(algorithm_a_h4_data)
+
             except ValueError:
                 print("Puzzle #" + str(puzzle_counter) + " is not configured properly")
-            # except Exception as e: print(e)
+            except Exception as e: print(e)
             puzzle_counter += 1
     analysis_file.close()

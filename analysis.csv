@@ -1,5 +1,7 @@
-Puzzle Number,Algorithm,Heuristic,Length of the Solution,Length of the Search Path,Execution Time (in seconds),Cost of Solution
-1,GBFS,h1,2,2,0.002,2
-1,GBFS,h2,4,2,0.0,1
-1,GBFS,h3,6,2,0.0,1
-1,GBFS,h4,8,2,0.0,1
+Puzzle Number,Algorithm,Heuristic,Length of the Solution,Length of the Search Path,Execution Time (in seconds)
+1,UCS,N/A,2,6,0.0025
+2,UCS,N/A,10,1755,1.4032
+3,UCS,N/A,17,5118,3.8712
+4,UCS,N/A,0,156,0.046
+5,UCS,N/A,0,353,0.1026
+6,UCS,N/A,32,805,0.3085
