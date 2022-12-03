@@ -265,27 +265,32 @@ class UCSSearchTree:
         Length of the Search Path
         Execution Time
     """
-    def uniform_cost_search(self):
+    def uniform_cost_search(self, print_results):
         # initialize output files
         current_directory = os.path.dirname(os.path.realpath(__file__))
         output_directory = "outputs"
         search_filename = "ucs-search-" + str(self.id) + ".txt"
         solution_filename = "ucs-sol-" + str(self.id) + ".txt"
-        search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
-        solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
+        search_file = None
+        solution_file = None
+        if print_results:
+            search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
+            solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
 
         start = time.time()
         execution_time = 0
 
         while True:
             if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
-                solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
-                solution_file.write(self.puzzle.stringify_board() + "\n")
-                solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
+                if print_results:
+                    solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
+                    solution_file.write(self.puzzle.stringify_board() + "\n")
+                    solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
                 execution_time = round(time.time() - start, 4)
-                solution_file.write(F'Runtime: {execution_time}s \n')
                 current_node = self.open[0]
-                search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
+                if print_results:
+                    solution_file.write(F'Runtime: {execution_time}s \n')
+                    search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
                 
                 # compute solution path
                 while True:
@@ -296,16 +301,17 @@ class UCSSearchTree:
                 self.solution_path.pop(0) # removes root node from solution path
 
                 # write solutions to file
-                solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
-                solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
-                solution_file.write("Solution path: ")
-                for node in self.solution_path:
-                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
-                solution_file.write("\n\n")
-                for node in self.solution_path:
-                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
-                solution_file.write("\n")
-                solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
+                if print_results:
+                    solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
+                    solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
+                    solution_file.write("Solution path: ")
+                    for node in self.solution_path:
+                        solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
+                    solution_file.write("\n\n")
+                    for node in self.solution_path:
+                        solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
+                    solution_file.write("\n")
+                    solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
                 break
             else:
                 # removes this node from the open list if list contains another similar state of lower or same cost
@@ -313,7 +319,7 @@ class UCSSearchTree:
                     self.open.pop(0)
                     if len(self.open) == 0: # no solution can be found
                         execution_time = round(time.time() - start, 4)
-                        solution_file.write("no solution")
+                        if print_results: solution_file.write("no solution")
                         break
                     continue
 
@@ -332,15 +338,17 @@ class UCSSearchTree:
                 self.visited.append(visited_node.string_puzzle)
 
                 # add searched node to search file
-                current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
-                search_file.write(current_search + "\n")
+                if print_results:
+                    current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
+                    search_file.write(current_search + "\n")
 
                 if len(self.open) == 0: # no solution can be found
                     execution_time = round(time.time() - start, 4)
-                    solution_file.write("no solution")
+                    if print_results: solution_file.write("no solution")
                     break
-        search_file.close()
-        solution_file.close() 
+        if print_results:
+            search_file.close()
+            solution_file.close() 
         return [len(self.solution_path), len(self.closed), execution_time]
 
     def generate_all_children_ucs(self, node: SearchNode):
@@ -376,8 +384,8 @@ class UCSSearchTree:
                 return True
         return False
     
-    def run(self):
-        return self.uniform_cost_search()
+    def run(self, print_results):
+        return self.uniform_cost_search(print_results)
 
 class GBFSSearchTree:
 
@@ -402,27 +410,32 @@ class GBFSSearchTree:
         Cost of solution (None if no solution)
     """
     
-    def GBFS(self, heuristic):
+    def GBFS(self, heuristic, print_results):
         # initialize output files
         current_directory = os.path.dirname(os.path.realpath(__file__))
         output_directory = "outputs"
         search_filename = "GBFS-h" + str(heuristic) + "-search-" + str(self.id) + ".txt"
         solution_filename = "GBFS-h" + str(heuristic) + "-sol-" + str(self.id) + ".txt"
-        search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
-        solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
+        search_file = None
+        solution_file = None
+        if print_results:
+            search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
+            solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
 
         start = time.time()
         execution_time = 0
 
         while True:
             if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
-                solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
-                solution_file.write(self.puzzle.stringify_board() + "\n")
-                solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
+                if print_results:
+                    solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
+                    solution_file.write(self.puzzle.stringify_board() + "\n")
+                    solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
                 execution_time = round(time.time() - start, 4)
-                solution_file.write(F'Runtime: {execution_time}s \n')
                 current_node = self.open[0]
-                search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
+                if print_results:
+                    solution_file.write(F'Runtime: {execution_time}s \n')
+                    search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
                 
                 # compute solution path
                 while True:
@@ -434,16 +447,17 @@ class GBFSSearchTree:
                 
 
                 # write solutions to file
-                solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
-                solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
-                solution_file.write("Solution path: ")
-                for node in self.solution_path:
-                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
-                solution_file.write("\n\n")
-                for node in self.solution_path:
-                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
-                solution_file.write("\n")
-                solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
+                if print_results:
+                    solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
+                    solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
+                    solution_file.write("Solution path: ")
+                    for node in self.solution_path:
+                        solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
+                    solution_file.write("\n\n")
+                    for node in self.solution_path:
+                        solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
+                    solution_file.write("\n")
+                    solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
                 break
             else:
                 # removes this node from the open list if list contains another similar state of lower or same cost
@@ -451,7 +465,7 @@ class GBFSSearchTree:
                     self.open.pop(0)
                     if len(self.open) == 0: # no solution can be found
                         execution_time = round(time.time() - start, 4)
-                        solution_file.write("no solution")
+                        if print_results: solution_file.write("no solution")
                         break
                     continue
 
@@ -470,15 +484,17 @@ class GBFSSearchTree:
                 self.visited.append(visited_node.string_puzzle)
 
                 # add searched node to search file
-                current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
-                search_file.write(current_search + "\n")
+                if print_results:
+                    current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
+                    search_file.write(current_search + "\n")
 
                 if len(self.open) == 0: # no solution can be found
                     execution_time = round(time.time() - start, 4)
-                    solution_file.write("no solution")
+                    if print_results: solution_file.write("no solution")
                     break
-        search_file.close()
-        solution_file.close() 
+        if print_results:
+            search_file.close()
+            solution_file.close() 
         return [len(self.solution_path), len(self.closed), execution_time]
 
     def generate_all_children_GBFS(self, node: SearchNode, heuristic):
@@ -578,8 +594,8 @@ class GBFSSearchTree:
         self.visited = []
         self.solution_path = []
 
-    def run_GBFS(self, heuristic):
-        results = self.GBFS(heuristic)
+    def run_GBFS(self, heuristic, print_results):
+        results = self.GBFS(heuristic, print_results)
         self.__reset__()
         return results
 
@@ -605,27 +621,33 @@ class AlgorithmASearchTree:
         Execution Time
     """
     
-    def algorithm_A(self, heuristic):
+    def algorithm_A(self, heuristic, print_results):
         # initialize output files
+
         current_directory = os.path.dirname(os.path.realpath(__file__))
         output_directory = "outputs"
         search_filename = "a-h" + str(heuristic) + "-search-" + str(self.id) + ".txt"
         solution_filename = "a-h" + str(heuristic) + "-sol-" + str(self.id) + ".txt"
-        search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
-        solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
+        search_file = None
+        solution_file = None
+        if print_results:
+            search_file = open(os.path.join(current_directory, output_directory, search_filename), "w")
+            solution_file = open(os.path.join(current_directory, output_directory, solution_filename), "w")
 
         start = time.time()
         execution_time = 0
 
         while True:
             if self.puzzle.is_end(self.open[0].board): # REACHED GOAL
-                solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
-                solution_file.write(self.puzzle.stringify_board() + "\n")
-                solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
+                if print_results:
+                    solution_file.write("Initial board configuration: " + self.puzzle.string_puzzle + "\n\n")
+                    solution_file.write(self.puzzle.stringify_board() + "\n")
+                    solution_file.write("Car fuel available: " + str(self.puzzle.fuel) + "\n")
                 execution_time = round(time.time() - start, 4)
-                solution_file.write(F'Runtime: {execution_time}s \n')
                 current_node = self.open[0]
-                search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
+                if print_results:
+                    solution_file.write(F'Runtime: {execution_time}s \n')
+                    search_file.write(str(current_node.f) + " " + str(current_node.g) + " " + str(current_node.h) + " " + current_node.string_puzzle)
                 
                 # compute solution path
                 while True:
@@ -636,16 +658,17 @@ class AlgorithmASearchTree:
                 self.solution_path.pop(0) # removes root node from solution path
 
                 # write solutions to file
-                solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
-                solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
-                solution_file.write("Solution path: ")
-                for node in self.solution_path:
-                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
-                solution_file.write("\n\n")
-                for node in self.solution_path:
-                    solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
-                solution_file.write("\n")
-                solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
+                if print_results:
+                    solution_file.write("Search path length: " + str(len(self.closed)) + " states\n")
+                    solution_file.write("Solution path length: " + str(len(self.solution_path)) + " moves\n")
+                    solution_file.write("Solution path: ")
+                    for node in self.solution_path:
+                        solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "; ")
+                    solution_file.write("\n\n")
+                    for node in self.solution_path:
+                        solution_file.write(node.car + " " + node.action + " " + str(node.moves) + "             " + str(node.fuel[node.car]) + " " + node.string_puzzle + "\n")
+                    solution_file.write("\n")
+                    solution_file.write(self.puzzle.stringify_board(self.open[0].string_puzzle))
                 break
             else:
                 # removes this node from the open list if list contains another similar state of lower or same cost
@@ -653,7 +676,7 @@ class AlgorithmASearchTree:
                     self.open.pop(0)
                     if len(self.open) == 0: # no solution can be found
                         execution_time = round(time.time() - start, 4)
-                        solution_file.write("no solution")
+                        if print_results: solution_file.write("no solution")
                         break
                     continue
 
@@ -672,15 +695,17 @@ class AlgorithmASearchTree:
                 self.visited.append(visited_node.string_puzzle)
 
                 # add searched node to search file
-                current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
-                search_file.write(current_search + "\n")
+                if print_results:
+                    current_search = str(visited_node.f) + " " + str(visited_node.g) + " " + str(visited_node.h) + " " + visited_node.string_puzzle
+                    search_file.write(current_search + "\n")
 
                 if len(self.open) == 0: # no solution can be found
                     execution_time = round(time.time() - start, 4)
-                    solution_file.write("no solution")
+                    if print_results: solution_file.write("no solution")
                     break
-        search_file.close()
-        solution_file.close() 
+        if print_results:
+            search_file.close()
+            solution_file.close() 
         return [len(self.solution_path), len(self.closed), execution_time]
 
     def generate_all_children_algorithm_A(self, node: SearchNode, heuristic):
@@ -778,25 +803,27 @@ class AlgorithmASearchTree:
         self.visited = []
         self.solution_path = []
 
-    def run_algorithm_A(self, heuristic):
-        results = self.algorithm_A(heuristic)
+    def run_algorithm_A(self, heuristic, print_results):
+        results = self.algorithm_A(heuristic, print_results)
         self.__reset__()
         return results
 
 # Runner
 if __name__ == '__main__':
     # 2.2 Dealing with input file
-    # puzzles_file = open('sample-input.txt', 'r')
-    puzzles_file = open('puzzles.txt', 'r') # Full 50 puzzles file
+    puzzles_file = open('sample-input.txt', 'r')
+    # puzzles_file = open('puzzles.txt', 'r') # Full 50 puzzles file
     lines = [line.strip() for line in puzzles_file.readlines() if line.strip()] # Removes empty lines
     RushHour.print_board
     puzzles_file.close()
 
-    # Setting up csv file for data analysis
+    # setting up csv file for data analysis
     analysis_header = ["Puzzle Number", "Algorithm", "Heuristic", "Length of the Solution", "Length of the Search Path", "Execution Time (in seconds)"]
     analysis_file = open('analysis.csv', 'w', encoding='UTF8', newline='')
     writer = csv.writer(analysis_file)
     writer.writerow(analysis_header)
+
+    print_results = False # set to true if need output files
 
     puzzle_counter = 1
     for line in lines:
@@ -804,19 +831,19 @@ if __name__ == '__main__':
             try:
                 # UCS
                 ucs_search = UCSSearchTree(line.split(), puzzle_counter)
-                ucs_results = ucs_search.run()
+                ucs_results = ucs_search.run(print_results)
                 ucs_data = [puzzle_counter, "UCS", "N/A"] + ucs_results
                 writer.writerow(ucs_data)
 
                 # GBFS
                 GBFS_search = GBFSSearchTree(line.split(), puzzle_counter)
-                GBFS_h1_results = GBFS_search.run_GBFS(1)
+                GBFS_h1_results = GBFS_search.run_GBFS(1, print_results)
                 GBFS_h1_data = [puzzle_counter, "GBFS", "h1"] + GBFS_h1_results
-                GBFS_h2_results = GBFS_search.run_GBFS(2)
+                GBFS_h2_results = GBFS_search.run_GBFS(2, print_results)
                 GBFS_h2_data = [puzzle_counter, "GBFS", "h2"] + GBFS_h2_results
-                GBFS_h3_results = GBFS_search.run_GBFS(3)
+                GBFS_h3_results = GBFS_search.run_GBFS(3, print_results)
                 GBFS_h3_data = [puzzle_counter, "GBFS", "h3"] + GBFS_h3_results
-                GBFS_h4_results = GBFS_search.run_GBFS(4)
+                GBFS_h4_results = GBFS_search.run_GBFS(4, print_results)
                 GBFS_h4_data = [puzzle_counter, "GBFS", "h4"] + GBFS_h4_results
                 writer.writerow(GBFS_h1_data)
                 writer.writerow(GBFS_h2_data)
@@ -825,13 +852,13 @@ if __name__ == '__main__':
 
                 # A
                 algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
-                algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1)
+                algorithm_a_h1_results = algorithm_a_search.run_algorithm_A(1, print_results)
                 algorithm_a_h1_data = [puzzle_counter, "Algorithm A", "h1"] + algorithm_a_h1_results
-                algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2)
+                algorithm_a_h2_results = algorithm_a_search.run_algorithm_A(2, print_results)
                 algorithm_a_h2_data = [puzzle_counter, "Algorithm A", "h2"] + algorithm_a_h2_results
-                algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3)
+                algorithm_a_h3_results = algorithm_a_search.run_algorithm_A(3, print_results)
                 algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
-                algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
+                algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4, print_results)
                 algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
                 writer.writerow(algorithm_a_h1_data)
                 writer.writerow(algorithm_a_h2_data)
