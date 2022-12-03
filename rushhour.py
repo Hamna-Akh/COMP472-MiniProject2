@@ -323,8 +323,8 @@ class UCSSearchTree:
                 for child in children:
                     self.open.append(child)
 
-                # sort open by lowest f (same as g in this case)
-                self.open.sort(key=attrgetter('f'))
+                # sort open by lowest g
+                self.open.sort(key=attrgetter('g'))
 
                 # close current node
                 visited_node = self.open.pop(0)
@@ -372,7 +372,7 @@ class UCSSearchTree:
             if skip_first:
                 skip_first = False
                 continue
-            if (open_node.string_puzzle == node.string_puzzle) and (open_node.f <= node.f):
+            if (open_node.string_puzzle == node.string_puzzle) and (open_node.g <= node.g):
                 return True
         return False
     
@@ -503,6 +503,8 @@ class GBFSSearchTree:
                         h_value = self.h3_multiplier_blocked_vehicles(child_node)
                     elif heuristic == 4:
                         h_value = self.h4_open_positions(child_node)
+                    elif heuristic == 5:
+                        h_value = self.h5_sum_blocked_vehicles_and_positions(child_node)
                     child_node.set_h(h_value)
 
                     is_parent_node = (child_node.string_puzzle == node.string_puzzle)
@@ -563,14 +565,32 @@ class GBFSSearchTree:
         return 2 * len(blocked_cars)
 
     def h4_open_positions(self, node: SearchNode):
-            a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
-            max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
-            blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
-            open_counter = 0
-            for x in range(blocked_pointer, 6):
-                position = node.board[x][2]
-                if (position == "."): open_counter += 1
-            return open_counter
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
+        max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
+        open_counter = 0
+        
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position == "."): open_counter += 1
+        return open_counter
+    
+    def h5_sum_blocked_vehicles_and_positions(self, node: SearchNode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
+        max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
+        blocked_cars = [] # initialize empty list of blocked cars
+        blocked_positions = [] # initialize empty list of blocked positions
+        
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position not in blocked_cars) and (position != "."):
+                blocked_cars.append(position)
+            if (position != "."):
+                blocked_positions.append(position)
+        
+        sum_blocked_cars_and_positions = len(blocked_cars) + len(blocked_positions)
+        return sum_blocked_cars_and_positions
 
     def __reset__(self):
         self.open = [self.root]
@@ -704,6 +724,8 @@ class AlgorithmASearchTree:
                         h_value = self.h3_multiplier_blocked_vehicles(child_node)
                     elif heuristic == 4:
                         h_value = self.h4_open_positions(child_node)
+                    elif heuristic == 5:
+                        h_value = self.h5_sum_blocked_vehicles_and_positions(child_node)
                     child_node.set_h(h_value)
 
                     is_parent_node = (child_node.string_puzzle == node.string_puzzle)
@@ -771,6 +793,23 @@ class AlgorithmASearchTree:
             position = node.board[x][2]
             if (position == "."): open_counter += 1
         return open_counter
+
+    def h5_sum_blocked_vehicles_and_positions(self, node: SearchNode):
+        a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
+        max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
+        blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
+        blocked_cars = [] # initialize empty list of blocked cars
+        blocked_positions = [] # initialize empty list of blocked positions
+        
+        for x in range(blocked_pointer, 6):
+            position = node.board[x][2]
+            if (position not in blocked_cars) and (position != "."):
+                blocked_cars.append(position)
+            if (position != "."):
+                blocked_positions.append(position)
+        
+        sum_blocked_cars_and_positions = len(blocked_cars) + len(blocked_positions)
+        return sum_blocked_cars_and_positions
     
     def __reset__(self):
         self.open = [self.root]
@@ -818,10 +857,13 @@ if __name__ == '__main__':
                 GBFS_h3_data = [puzzle_counter, "GBFS", "h3"] + GBFS_h3_results
                 GBFS_h4_results = GBFS_search.run_GBFS(4)
                 GBFS_h4_data = [puzzle_counter, "GBFS", "h4"] + GBFS_h4_results
+                GBFS_h5_results = GBFS_search.run_GBFS(5)
+                GBFS_h5_data = [puzzle_counter, "GBFS", "h5"] + GBFS_h5_results
                 writer.writerow(GBFS_h1_data)
                 writer.writerow(GBFS_h2_data)
                 writer.writerow(GBFS_h3_data)
                 writer.writerow(GBFS_h4_data)
+                writer.writerow(GBFS_h5_data)
 
                 # A
                 algorithm_a_search = AlgorithmASearchTree(line.split(), puzzle_counter)
@@ -833,10 +875,13 @@ if __name__ == '__main__':
                 algorithm_a_h3_data = [puzzle_counter, "Algorithm A", "h3"] + algorithm_a_h3_results
                 algorithm_a_h4_results = algorithm_a_search.run_algorithm_A(4)
                 algorithm_a_h4_data = [puzzle_counter, "Algorithm A", "h4"] + algorithm_a_h4_results
+                algorithm_a_h5_results = algorithm_a_search.run_algorithm_A(5)
+                algorithm_a_h5_data = [puzzle_counter, "Algorithm A", "h5"] + algorithm_a_h5_results
                 writer.writerow(algorithm_a_h1_data)
                 writer.writerow(algorithm_a_h2_data)
                 writer.writerow(algorithm_a_h3_data)
                 writer.writerow(algorithm_a_h4_data)
+                writer.writerow(algorithm_a_h5_data)
 
             except ValueError:
                 print("Puzzle #" + str(puzzle_counter) + " is not configured properly")
