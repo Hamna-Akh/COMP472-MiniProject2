@@ -524,7 +524,7 @@ class GBFSSearchTree:
             if skip_first:
                 skip_first = False
                 continue
-            if (open_node.string_puzzle == node.string_puzzle):
+            if (open_node.string_puzzle == node.string_puzzle) and (open_node.h <= node.h):
                 return True
         return False
     
@@ -789,6 +789,7 @@ class AlgorithmASearchTree:
         max_a_coordinate = max(a_coordinates,key=itemgetter(0))[0] # A's highest x-coordinate value
         blocked_pointer = max_a_coordinate + 1 # set pointer to right of max coordinate of A
         open_counter = 0
+        
         for x in range(blocked_pointer, 6):
             position = node.board[x][2]
             if (position == "."): open_counter += 1
