@@ -524,7 +524,7 @@ class GBFSSearchTree:
             if skip_first:
                 skip_first = False
                 continue
-            if (open_node.string_puzzle == node.string_puzzle) and (open_node.h <= node.h):
+            if (open_node.string_puzzle == node.string_puzzle):
                 return True
         return False
     
@@ -562,7 +562,7 @@ class GBFSSearchTree:
             position = node.board[x][2]
             if (position not in blocked_cars) and (position != "."): 
                 blocked_cars.append(position)
-        return 2 * len(blocked_cars)
+        return 5 * len(blocked_cars)
 
     def h4_open_positions(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
@@ -782,7 +782,7 @@ class AlgorithmASearchTree:
             position = node.board[x][2]
             if (position not in blocked_cars) and (position != "."): 
                 blocked_cars.append(position)
-        return 2 * len(blocked_cars)
+        return 5 * len(blocked_cars)
 
     def h4_open_positions(self, node: SearchNode):
         a_coordinates = self.puzzle.get_car_coordinates('A', node.board) # get coordinates of Ambulance (A)
