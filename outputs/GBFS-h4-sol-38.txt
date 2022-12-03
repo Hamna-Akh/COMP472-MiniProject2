@@ -1,0 +1,45 @@
+Initial board configuration: ..MOOO..M..B..AACB.PPPC....DEE.FFD..
+
+..MOOO
+..M..B
+..AACB
+.PPPC.
+...DEE
+.FFD..
+
+Car fuel available: {'M': 100, 'O': 100, 'B': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100, 'E': 100, 'F': 100}
+Runtime: 109.0925s 
+Search path length: 10720 states
+Solution path length: 23 moves
+Solution path: P left 1; B down 1; A left 1; D up 3; C up 1; F right 2; E left 3; E right 1; B up 1; E left 2; B down 1; P right 1; F left 3; P left 1; D down 3; F right 1; C down 2; A right 1; B up 1; B down 2; A right 1; M down 1; A right 1; 
+
+P left 1             99 ..MOOO..M..B..AACBPPP.C....DEE.FFD..
+B down 1             99 ..MOOO..M.....AACBPPP.CB...DEE.FFD..
+A left 1             99 ..MOOO..M....AA.CBPPP.CB...DEE.FFD..
+D up 3             97 ..MOOO..MD...AADCBPPP.CB....EE.FF...
+C up 1             99 ..MOOO..MDC..AADCBPPP..B....EE.FF...
+F right 2             98 ..MOOO..MDC..AADCBPPP..B....EE...FF.
+E left 3             97 ..MOOO..MDC..AADCBPPP..B.EE......FF.
+E right 1             96 ..MOOO..MDC..AADCBPPP..B..EE.....FF.
+B up 1             98 ..MOOO..MDCB.AADCBPPP.....EE.....FF.
+E left 2             94 ..MOOO..MDCB.AADCBPPP...EE.......FF.
+B down 1             97 ..MOOO..MDC..AADCBPPP..BEE.......FF.
+P right 1             98 ..MOOO..MDC..AADCB.PPP.BEE.......FF.
+F left 3             95 ..MOOO..MDC..AADCB.PPP.BEE....FF....
+P left 1             97 ..MOOO..MDC..AADCBPPP..BEE....FF....
+D down 3             94 ..MOOO..M.C..AA.CBPPP..BEE.D..FF.D..
+F right 1             94 ..MOOO..M.C..AA.CBPPP..BEE.D...FFD..
+C down 2             97 ..MOOO..M....AA..BPPP.CBEE.DC..FFD..
+A right 1             98 ..MOOO..M.....AA.BPPP.CBEE.DC..FFD..
+B up 1             96 ..MOOO..M..B..AA.BPPP.C.EE.DC..FFD..
+B down 2             94 ..MOOO..M.....AA..PPP.CBEE.DCB.FFD..
+A right 1             97 ..MOOO..M......AA.PPP.CBEE.DCB.FFD..
+M down 1             99 ...OOO..M.....MAA.PPP.CBEE.DCB.FFD..
+A right 1             96 ...OOO..M.....M.AAPPP.CBEE.DCB.FFD..
+
+...OOO
+..M...
+..M.AA
+PPP.CB
+EE.DCB
+.FFD..

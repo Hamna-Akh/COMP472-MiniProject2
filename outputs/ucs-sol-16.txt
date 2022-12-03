@@ -1,0 +1,50 @@
+Initial board configuration: OMBBCCOM.D..OAADE.FFG.EP..GHHP.IIJJP
+
+OMBBCC
+OM.D..
+OAADE.
+FFG.EP
+..GHHP
+.IIJJP
+
+Car fuel available: {'O': 100, 'M': 100, 'B': 100, 'C': 100, 'D': 100, 'A': 100, 'E': 100, 'F': 100, 'G': 100, 'P': 100, 'H': 100, 'I': 100, 'J': 100}
+Runtime: 53.7954s 
+Search path length: 8913 states
+Solution path length: 28 moves
+Solution path: I left 1; P up 2; J right 1; H right 1; G down 1; E up 1; D down 3; F right 3; G up 1; I right 1; A right 1; M down 3; O down 3; A left 2; B left 2; G up 3; C left 1; P up 1; F right 1; D up 3; J left 1; H left 2; F left 2; P down 3; E down 2; C right 1; D up 1; A right 4; 
+
+I left 1             99 OMBBCCOM.D..OAADE.FFG.EP..GHHPII.JJP
+P up 2             98 OMBBCCOM.D.POAADEPFFG.EP..GHH.II.JJ.
+J right 1             99 OMBBCCOM.D.POAADEPFFG.EP..GHH.II..JJ
+H right 1             99 OMBBCCOM.D.POAADEPFFG.EP..G.HHII..JJ
+G down 1             99 OMBBCCOM.D.POAADEPFF..EP..G.HHIIG.JJ
+E up 1             99 OMBBCCOM.DEPOAADEPFF...P..G.HHIIG.JJ
+D down 3             97 OMBBCCOM..EPOAA.EPFF...P..GDHHIIGDJJ
+F right 3             97 OMBBCCOM..EPOAA.EP...FFP..GDHHIIGDJJ
+G up 1             98 OMBBCCOM..EPOAA.EP..GFFP..GDHHII.DJJ
+I right 1             98 OMBBCCOM..EPOAA.EP..GFFP..GDHH.IIDJJ
+A right 1             99 OMBBCCOM..EPO.AAEP..GFFP..GDHH.IIDJJ
+M down 3             97 O.BBCCO...EPO.AAEP.MGFFP.MGDHH.IIDJJ
+O down 3             97 ..BBCC....EP..AAEPOMGFFPOMGDHHOIIDJJ
+A left 2             97 ..BBCC....EPAA..EPOMGFFPOMGDHHOIIDJJ
+B left 2             98 BB..CC....EPAA..EPOMGFFPOMGDHHOIIDJJ
+G up 3             95 BBG.CC..G.EPAA..EPOM.FFPOM.DHHOIIDJJ
+C left 1             99 BBGCC...G.EPAA..EPOM.FFPOM.DHHOIIDJJ
+P up 1             97 BBGCCP..G.EPAA..EPOM.FF.OM.DHHOIIDJJ
+F right 1             96 BBGCCP..G.EPAA..EPOM..FFOM.DHHOIIDJJ
+D up 3             94 BBGCCP..GDEPAA.DEPOM..FFOM..HHOII.JJ
+J left 1             98 BBGCCP..GDEPAA.DEPOM..FFOM..HHOIIJJ.
+H left 2             97 BBGCCP..GDEPAA.DEPOM..FFOMHH..OIIJJ.
+F left 2             94 BBGCCP..GDEPAA.DEPOMFF..OMHH..OIIJJ.
+P down 3             94 BBGCC...GDE.AA.DE.OMFF.POMHH.POIIJJP
+E down 2             97 BBGCC...GD..AA.D..OMFFEPOMHHEPOIIJJP
+C right 1             98 BBG.CC..GD..AA.D..OMFFEPOMHHEPOIIJJP
+D up 1             93 BBGDCC..GD..AA....OMFFEPOMHHEPOIIJJP
+A right 4             93 BBGDCC..GD......AAOMFFEPOMHHEPOIIJJP
+
+BBGDCC
+..GD..
+....AA
+OMFFEP
+OMHHEP
+OIIJJP

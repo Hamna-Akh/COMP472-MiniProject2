@@ -1,0 +1,45 @@
+Initial board configuration: .MBBCDEM.FCDEAAFG.HHOIG...OI....O...
+
+.MBBCD
+EM.FCD
+EAAFG.
+HHOIG.
+..OI..
+..O...
+
+Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'D': 100, 'E': 100, 'F': 100, 'A': 100, 'G': 100, 'H': 100, 'O': 100, 'I': 100}
+Runtime: 111.9533s 
+Search path length: 11267 states
+Solution path length: 23 moves
+Solution path: G down 2; E up 1; A left 1; D down 3; C down 1; B right 2; F up 1; I down 1; O up 3; H right 3; O down 3; A right 1; E down 1; A right 1; M down 3; A left 1; F down 1; B left 3; F up 1; C up 1; A right 2; O up 1; A right 1; 
+
+G down 2             98 .MBBCDEM.FCDEAAF..HHOI....OIG...O.G.
+E up 1             99 EMBBCDEM.FCD.AAF..HHOI....OIG...O.G.
+A left 1             99 EMBBCDEM.FCDAA.F..HHOI....OIG...O.G.
+D down 3             97 EMBBC.EM.FC.AA.F..HHOI.D..OIGD..O.G.
+C down 1             99 EMBB..EM.FC.AA.FC.HHOI.D..OIGD..O.G.
+B right 2             98 EM..BBEM.FC.AA.FC.HHOI.D..OIGD..O.G.
+F up 1             99 EM.FBBEM.FC.AA..C.HHOI.D..OIGD..O.G.
+I down 1             99 EM.FBBEM.FC.AA..C.HHO..D..OIGD..OIG.
+O up 3             97 EMOFBBEMOFC.AAO.C.HH...D...IGD...IG.
+H right 3             97 EMOFBBEMOFC.AAO.C....HHD...IGD...IG.
+O down 3             94 EM.FBBEM.FC.AA..C...OHHD..OIGD..OIG.
+A right 1             98 EM.FBBEM.FC..AA.C...OHHD..OIGD..OIG.
+E down 1             98 .M.FBBEM.FC.EAA.C...OHHD..OIGD..OIG.
+A right 1             97 .M.FBBEM.FC.E.AAC...OHHD..OIGD..OIG.
+M down 3             97 ...FBBE..FC.E.AAC..MOHHD.MOIGD..OIG.
+A left 1             96 ...FBBE..FC.EAA.C..MOHHD.MOIGD..OIG.
+F down 1             98 ....BBE..FC.EAAFC..MOHHD.MOIGD..OIG.
+B left 3             95 .BB...E..FC.EAAFC..MOHHD.MOIGD..OIG.
+F up 1             97 .BBF..E..FC.EAA.C..MOHHD.MOIGD..OIG.
+C up 1             98 .BBFC.E..FC.EAA....MOHHD.MOIGD..OIG.
+A right 2             94 .BBFC.E..FC.E..AA..MOHHD.MOIGD..OIG.
+O up 1             93 .BBFC.E..FC.E.OAA..MOHHD.MOIGD...IG.
+A right 1             93 .BBFC.E..FC.E.O.AA.MOHHD.MOIGD...IG.
+
+.BBFC.
+E..FC.
+E.O.AA
+.MOHHD
+.MOIGD
+...IG.

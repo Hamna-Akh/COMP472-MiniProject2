@@ -1,0 +1,42 @@
+Initial board configuration: OOO..MP....MPAAQ.BP..Q.B..CQDDEECFF.
+
+OOO..M
+P....M
+PAAQ.B
+P..Q.B
+..CQDD
+EECFF.
+
+Car fuel available: {'O': 100, 'M': 100, 'P': 100, 'A': 100, 'Q': 100, 'B': 100, 'C': 100, 'D': 100, 'E': 100, 'F': 100}
+Runtime: 5.8526s 
+Search path length: 1625 states
+Solution path length: 20 moves
+Solution path: C up 1; E right 1; P down 2; A left 1; Q up 2; C up 2; D left 3; B down 1; F right 1; Q down 3; M down 1; O right 3; C up 1; A right 2; P up 1; A right 1; C down 1; O left 1; M up 1; A right 1; 
+
+C up 1             99 OOO..MP....MPAAQ.BP.CQ.B..CQDDEE.FF.
+E right 1             99 OOO..MP....MPAAQ.BP.CQ.B..CQDD.EEFF.
+P down 2             98 OOO..M.....M.AAQ.BP.CQ.BP.CQDDPEEFF.
+A left 1             99 OOO..M.....MAA.Q.BP.CQ.BP.CQDDPEEFF.
+Q up 2             98 OOOQ.M...Q.MAA.Q.BP.C..BP.C.DDPEEFF.
+C up 2             97 OOOQ.M..CQ.MAACQ.BP....BP...DDPEEFF.
+D left 3             97 OOOQ.M..CQ.MAACQ.BP....BPDD...PEEFF.
+B down 1             99 OOOQ.M..CQ.MAACQ..P....BPDD..BPEEFF.
+F right 1             99 OOOQ.M..CQ.MAACQ..P....BPDD..BPEE.FF
+Q down 3             95 OOO..M..C..MAAC...P..Q.BPDDQ.BPEEQFF
+M down 1             99 OOO.....C..MAAC..MP..Q.BPDDQ.BPEEQFF
+O right 3             97 ...OOO..C..MAAC..MP..Q.BPDDQ.BPEEQFF
+C up 1             96 ..COOO..C..MAA...MP..Q.BPDDQ.BPEEQFF
+A right 2             97 ..COOO..C..M..AA.MP..Q.BPDDQ.BPEEQFF
+P up 1             97 ..COOO..C..MP.AA.MP..Q.BPDDQ.B.EEQFF
+A right 1             96 ..COOO..C..MP..AAMP..Q.BPDDQ.B.EEQFF
+C down 1             95 ...OOO..C..MP.CAAMP..Q.BPDDQ.B.EEQFF
+O left 1             96 ..OOO...C..MP.CAAMP..Q.BPDDQ.B.EEQFF
+M up 1             98 ..OOOM..C..MP.CAA.P..Q.BPDDQ.B.EEQFF
+A right 1             95 ..OOOM..C..MP.C.AAP..Q.BPDDQ.B.EEQFF
+
+..OOOM
+..C..M
+P.C.AA
+P..Q.B
+PDDQ.B
+.EEQFF

@@ -1,0 +1,67 @@
+Initial board configuration: OMBBCCOM.D..OAADE.FFG.EP..GHHP.IIJJP
+
+OMBBCC
+OM.D..
+OAADE.
+FFG.EP
+..GHHP
+.IIJJP
+
+Car fuel available: {'O': 100, 'M': 100, 'B': 100, 'C': 100, 'D': 100, 'A': 100, 'E': 100, 'F': 100, 'G': 100, 'P': 100, 'H': 100, 'I': 100, 'J': 100}
+Runtime: 27.7912s 
+Search path length: 5228 states
+Solution path length: 45 moves
+Solution path: D down 1; P up 2; J right 1; H right 1; D down 2; I left 1; G down 1; A right 1; F right 2; O down 1; M down 3; E up 1; B left 2; C left 1; P up 1; F right 2; G up 1; D up 1; I right 2; O down 2; A left 2; G up 3; M down 1; A right 2; A left 1; D up 2; A left 1; F left 3; P down 1; C right 1; D down 2; A right 1; D up 3; A right 1; O up 1; F right 1; M up 1; I left 1; J left 1; H left 2; P down 2; I left 1; J left 1; E down 3; A right 2; 
+
+D down 1             99 OMBBCCOM....OAADE.FFGDEP..GHHP.IIJJP
+P up 2             98 OMBBCCOM...POAADEPFFGDEP..GHH..IIJJ.
+J right 1             99 OMBBCCOM...POAADEPFFGDEP..GHH..II.JJ
+H right 1             99 OMBBCCOM...POAADEPFFGDEP..G.HH.II.JJ
+D down 2             97 OMBBCCOM...POAA.EPFFG.EP..GDHH.IIDJJ
+I left 1             99 OMBBCCOM...POAA.EPFFG.EP..GDHHII.DJJ
+G down 1             99 OMBBCCOM...POAA.EPFF..EP..GDHHIIGDJJ
+A right 1             99 OMBBCCOM...PO.AAEPFF..EP..GDHHIIGDJJ
+F right 2             98 OMBBCCOM...PO.AAEP..FFEP..GDHHIIGDJJ
+O down 1             99 .MBBCCOM...PO.AAEPO.FFEP..GDHHIIGDJJ
+M down 3             97 ..BBCCO....PO.AAEPOMFFEP.MGDHHIIGDJJ
+E up 1             99 ..BBCCO...EPO.AAEPOMFF.P.MGDHHIIGDJJ
+B left 2             98 BB..CCO...EPO.AAEPOMFF.P.MGDHHIIGDJJ
+C left 1             99 BB.CC.O...EPO.AAEPOMFF.P.MGDHHIIGDJJ
+P up 1             97 BB.CCPO...EPO.AAEPOMFF...MGDHHIIGDJJ
+F right 2             96 BB.CCPO...EPO.AAEPOM..FF.MGDHHIIGDJJ
+G up 1             98 BB.CCPO...EPO.AAEPOMG.FF.MGDHHII.DJJ
+D up 1             96 BB.CCPO...EPO.AAEPOMGDFF.MGDHHII..JJ
+I right 2             97 BB.CCPO...EPO.AAEPOMGDFF.MGDHH..IIJJ
+O down 2             97 BB.CCP....EP..AAEPOMGDFFOMGDHHO.IIJJ
+A left 2             97 BB.CCP....EPAA..EPOMGDFFOMGDHHO.IIJJ
+G up 3             95 BBGCCP..G.EPAA..EPOM.DFFOM.DHHO.IIJJ
+M down 1             96 BBGCCP..G.EPAA..EPO..DFFOM.DHHOMIIJJ
+A right 2             95 BBGCCP..G.EP..AAEPO..DFFOM.DHHOMIIJJ
+A left 1             94 BBGCCP..G.EP.AA.EPO..DFFOM.DHHOMIIJJ
+D up 2             94 BBGCCP..GDEP.AADEPO...FFOM..HHOMIIJJ
+A left 1             93 BBGCCP..GDEPAA.DEPO...FFOM..HHOMIIJJ
+F left 3             93 BBGCCP..GDEPAA.DEPOFF...OM..HHOMIIJJ
+P down 1             96 BBGCC...GDEPAA.DEPOFF..POM..HHOMIIJJ
+C right 1             98 BBG.CC..GDEPAA.DEPOFF..POM..HHOMIIJJ
+D down 2             92 BBG.CC..G.EPAA..EPOFFD.POM.DHHOMIIJJ
+A right 1             92 BBG.CC..G.EP.AA.EPOFFD.POM.DHHOMIIJJ
+D up 3             89 BBGDCC..GDEP.AA.EPOFF..POM..HHOMIIJJ
+A right 1             91 BBGDCC..GDEP..AAEPOFF..POM..HHOMIIJJ
+O up 1             96 BBGDCC..GDEPO.AAEPOFF..POM..HH.MIIJJ
+F right 1             92 BBGDCC..GDEPO.AAEPO.FF.POM..HH.MIIJJ
+M up 1             95 BBGDCC..GDEPO.AAEPOMFF.POM..HH..IIJJ
+I left 1             96 BBGDCC..GDEPO.AAEPOMFF.POM..HH.II.JJ
+J left 1             98 BBGDCC..GDEPO.AAEPOMFF.POM..HH.IIJJ.
+H left 2             97 BBGDCC..GDEPO.AAEPOMFF.POMHH...IIJJ.
+P down 2             94 BBGDCC..GDE.O.AAE.OMFF.POMHH.P.IIJJP
+I left 1             95 BBGDCC..GDE.O.AAE.OMFF.POMHH.PII.JJP
+J left 1             97 BBGDCC..GDE.O.AAE.OMFF.POMHH.PIIJJ.P
+E down 3             96 BBGDCC..GD..O.AA..OMFF.POMHHEPIIJJEP
+A right 2             89 BBGDCC..GD..O...AAOMFF.POMHHEPIIJJEP
+
+BBGDCC
+..GD..
+O...AA
+OMFF.P
+OMHHEP
+IIJJEP

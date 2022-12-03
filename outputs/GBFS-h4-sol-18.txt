@@ -1,0 +1,71 @@
+Initial board configuration: MMB..O..B..OAACP.O..CPDDEFFP..EGG...
+
+MMB..O
+..B..O
+AACP.O
+..CPDD
+EFFP..
+EGG...
+
+Car fuel available: {'M': 100, 'B': 100, 'O': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100, 'E': 100, 'F': 100, 'G': 100}
+Runtime: 33.0155s 
+Search path length: 6861 states
+Solution path length: 49 moves
+Solution path: P up 1; P up 1; F right 2; C down 1; A right 1; G right 1; G right 2; C down 1; A left 1; B down 2; F right 1; E up 1; B up 1; D left 2; O down 1; D left 1; P down 1; M right 2; M right 1; B up 1; O up 1; P down 2; A right 2; O down 1; E up 2; A left 1; P up 2; E up 1; D left 1; M right 1; A left 1; C up 2; M left 1; F left 2; F left 2; C down 1; A right 1; E down 1; G left 2; G left 2; P down 1; P down 1; A right 1; M right 1; O down 1; O down 1; A right 1; B down 1; A right 1; 
+
+P up 1             99 MMB..O..BP.OAACP.O..CPDDEFF...EGG...
+P up 1             98 MMBP.O..BP.OAACP.O..C.DDEFF...EGG...
+F right 2             98 MMBP.O..BP.OAACP.O..C.DDE..FF.EGG...
+C down 1             99 MMBP.O..BP.OAA.P.O..C.DDE.CFF.EGG...
+A right 1             99 MMBP.O..BP.O.AAP.O..C.DDE.CFF.EGG...
+G right 1             99 MMBP.O..BP.O.AAP.O..C.DDE.CFF.E.GG..
+G right 2             97 MMBP.O..BP.O.AAP.O..C.DDE.CFF.E...GG
+C down 1             98 MMBP.O..BP.O.AAP.O....DDE.CFF.E.C.GG
+A left 1             98 MMBP.O..BP.OAA.P.O....DDE.CFF.E.C.GG
+B down 2             98 MM.P.O...P.OAABP.O..B.DDE.CFF.E.C.GG
+F right 1             97 MM.P.O...P.OAABP.O..B.DDE.C.FFE.C.GG
+E up 1             99 MM.P.O...P.OAABP.OE.B.DDE.C.FF..C.GG
+B up 1             97 MM.P.O..BP.OAABP.OE...DDE.C.FF..C.GG
+D left 2             98 MM.P.O..BP.OAABP.OE.DD..E.C.FF..C.GG
+O down 1             99 MM.P....BP.OAABP.OE.DD.OE.C.FF..C.GG
+D left 1             97 MM.P....BP.OAABP.OEDD..OE.C.FF..C.GG
+P down 1             97 MM......BP.OAABP.OEDDP.OE.C.FF..C.GG
+M right 2             98 ..MM....BP.OAABP.OEDDP.OE.C.FF..C.GG
+M right 1             97 ...MM...BP.OAABP.OEDDP.OE.C.FF..C.GG
+B up 1             96 ..BMM...BP.OAA.P.OEDDP.OE.C.FF..C.GG
+O up 1             98 ..BMMO..BP.OAA.P.OEDDP..E.C.FF..C.GG
+P down 2             95 ..BMMO..B..OAA...OEDDP..E.CPFF..CPGG
+A right 2             96 ..BMMO..B..O..AA.OEDDP..E.CPFF..CPGG
+O down 1             97 ..BMM...B..O..AA.OEDDP.OE.CPFF..CPGG
+E up 2             97 ..BMM.E.B..OE.AA.O.DDP.O..CPFF..CPGG
+A left 1             95 ..BMM.E.B..OEAA..O.DDP.O..CPFF..CPGG
+P up 2             93 ..BMM.E.BP.OEAAP.O.DDP.O..C.FF..C.GG
+E up 1             96 E.BMM.E.BP.O.AAP.O.DDP.O..C.FF..C.GG
+D left 1             96 E.BMM.E.BP.O.AAP.ODD.P.O..C.FF..C.GG
+M right 1             96 E.B.MME.BP.O.AAP.ODD.P.O..C.FF..C.GG
+A left 1             94 E.B.MME.BP.OAA.P.ODD.P.O..C.FF..C.GG
+C up 2             96 E.B.MME.BP.OAACP.ODDCP.O....FF....GG
+M left 1             95 E.BMM.E.BP.OAACP.ODDCP.O....FF....GG
+F left 2             95 E.BMM.E.BP.OAACP.ODDCP.O..FF......GG
+F left 2             93 E.BMM.E.BP.OAACP.ODDCP.OFF........GG
+C down 1             95 E.BMM.E.BP.OAA.P.ODDCP.OFFC.......GG
+A right 1             93 E.BMM.E.BP.O.AAP.ODDCP.OFFC.......GG
+E down 1             95 ..BMM.E.BP.OEAAP.ODDCP.OFFC.......GG
+G left 2             95 ..BMM.E.BP.OEAAP.ODDCP.OFFC.....GG..
+G left 2             93 ..BMM.E.BP.OEAAP.ODDCP.OFFC...GG....
+P down 1             92 ..BMM.E.B..OEAAP.ODDCP.OFFCP..GG....
+P down 1             91 ..BMM.E.B..OEAA..ODDCP.OFFCP..GG.P..
+A right 1             92 ..BMM.E.B..OE.AA.ODDCP.OFFCP..GG.P..
+M right 1             94 ..B.MME.B..OE.AA.ODDCP.OFFCP..GG.P..
+O down 1             96 ..B.MME.B...E.AA.ODDCP.OFFCP.OGG.P..
+O down 1             95 ..B.MME.B...E.AA..DDCP.OFFCP.OGG.P.O
+A right 1             91 ..B.MME.B...E..AA.DDCP.OFFCP.OGG.P.O
+B down 1             95 ....MME.B...E.BAA.DDCP.OFFCP.OGG.P.O
+A right 1             90 ....MME.B...E.B.AADDCP.OFFCP.OGG.P.O
+
+....MM
+E.B...
+E.B.AA
+DDCP.O
+FFCP.O
+GG.P.O

@@ -1,0 +1,42 @@
+Initial board configuration: .MBBCD.MEFCDAAEFG.OOOHG.I..H..I.....
+
+.MBBCD
+.MEFCD
+AAEFG.
+OOOHG.
+I..H..
+I.....
+
+Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'D': 100, 'E': 100, 'F': 100, 'A': 100, 'G': 100, 'O': 100, 'H': 100, 'I': 100}
+Runtime: 80.4027s 
+Search path length: 12462 states
+Solution path length: 20 moves
+Solution path: G down 2; H down 1; D down 4; O right 3; E down 2; C down 1; B right 2; F up 1; A right 1; I up 2; A right 1; M down 4; A left 1; F down 1; B left 3; F up 1; C up 1; A right 2; M up 2; A right 1; 
+
+G down 2             98 .MBBCD.MEFCDAAEF..OOOH..I..HG.I...G.
+H down 1             99 .MBBCD.MEFCDAAEF..OOO...I..HG.I..HG.
+D down 4             96 .MBBC..MEFC.AAEF..OOO...I..HGDI..HGD
+O right 3             97 .MBBC..MEFC.AAEF.....OOOI..HGDI..HGD
+E down 2             98 .MBBC..M.FC.AA.F....EOOOI.EHGDI..HGD
+C down 1             99 .MBB...M.FC.AA.FC...EOOOI.EHGDI..HGD
+B right 2             98 .M..BB.M.FC.AA.FC...EOOOI.EHGDI..HGD
+F up 1             99 .M.FBB.M.FC.AA..C...EOOOI.EHGDI..HGD
+A right 1             99 .M.FBB.M.FC..AA.C...EOOOI.EHGDI..HGD
+I up 2             98 .M.FBB.M.FC.IAA.C.I.EOOO..EHGD...HGD
+A right 1             98 .M.FBB.M.FC.I.AAC.I.EOOO..EHGD...HGD
+M down 4             96 ...FBB...FC.I.AAC.I.EOOO.MEHGD.M.HGD
+A left 1             97 ...FBB...FC.IAA.C.I.EOOO.MEHGD.M.HGD
+F down 1             98 ....BB...FC.IAAFC.I.EOOO.MEHGD.M.HGD
+B left 3             95 .BB......FC.IAAFC.I.EOOO.MEHGD.M.HGD
+F up 1             97 .BBF.....FC.IAA.C.I.EOOO.MEHGD.M.HGD
+C up 1             98 .BBFC....FC.IAA...I.EOOO.MEHGD.M.HGD
+A right 2             95 .BBFC....FC.I..AA.I.EOOO.MEHGD.M.HGD
+M up 2             94 .BBFC....FC.IM.AA.IMEOOO..EHGD...HGD
+A right 1             94 .BBFC....FC.IM..AAIMEOOO..EHGD...HGD
+
+.BBFC.
+...FC.
+IM..AA
+IMEOOO
+..EHGD
+...HGD

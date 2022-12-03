@@ -1,0 +1,40 @@
+Initial board configuration: MMBBCO....CO.AA.DO.PEED..P.F...P.FGG
+
+MMBBCO
+....CO
+.AA.DO
+.PEED.
+.P.F..
+.P.FGG
+
+Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'O': 100, 'A': 100, 'D': 100, 'P': 100, 'E': 100, 'F': 100, 'G': 100}
+Runtime: 0.6009s 
+Search path length: 621 states
+Solution path length: 18 moves
+Solution path: D down 1; A right 1; O down 2; C down 1; B right 2; M right 2; P up 3; E left 2; F up 1; G left 3; F down 1; E right 2; P down 1; O down 1; M left 2; B left 2; C up 1; A right 2; 
+
+D down 1             99 MMBBCO....CO.AA..O.PEED..P.FD..P.FGG
+A right 1             99 MMBBCO....CO..AA.O.PEED..P.FD..P.FGG
+O down 2             98 MMBBC.....C...AA.O.PEEDO.P.FDO.P.FGG
+C down 1             99 MMBB......C...AACO.PEEDO.P.FDO.P.FGG
+B right 2             98 MM..BB....C...AACO.PEEDO.P.FDO.P.FGG
+M right 2             98 ..MMBB....C...AACO.PEEDO.P.FDO.P.FGG
+P up 3             97 .PMMBB.P..C..PAACO..EEDO...FDO...FGG
+E left 2             98 .PMMBB.P..C..PAACOEE..DO...FDO...FGG
+F up 1             99 .PMMBB.P..C..PAACOEE.FDO...FDO....GG
+G left 3             97 .PMMBB.P..C..PAACOEE.FDO...FDO.GG...
+F down 1             98 .PMMBB.P..C..PAACOEE..DO...FDO.GGF..
+E right 2             96 .PMMBB.P..C..PAACO..EEDO...FDO.GGF..
+P down 1             96 ..MMBB.P..C..PAACO.PEEDO...FDO.GGF..
+O down 1             97 ..MMBB.P..C..PAAC..PEEDO...FDO.GGF.O
+M left 2             96 MM..BB.P..C..PAAC..PEEDO...FDO.GGF.O
+B left 2             96 MMBB...P..C..PAAC..PEEDO...FDO.GGF.O
+C up 1             98 MMBBC..P..C..PAA...PEEDO...FDO.GGF.O
+A right 2             97 MMBBC..P..C..P..AA.PEEDO...FDO.GGF.O
+
+MMBBC.
+.P..C.
+.P..AA
+.PEEDO
+...FDO
+.GGF.O
