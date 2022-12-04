@@ -18,7 +18,7 @@ This project aims to implement and analyze a variety of seach algorithms for the
 ### Executing program
 
 * Clone the repository
-* From your ide run rushhour.py
+* From your ide run python3 rushhour.py
 * Ensure there is a folder called "outputs" to generate output files
 
 ## Authors
