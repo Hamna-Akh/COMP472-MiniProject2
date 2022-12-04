@@ -8,7 +8,7 @@ AAM.DC
 ......
 
 Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'A': 100, 'D': 100, 'E': 100, 'F': 100}
-Runtime: 2.4881s 
+Runtime: 5.675s 
 Search path length: 1455 states
 Solution path length: 9 moves
 Solution path: M down 1; B left 3; D up 2; M up 2; A right 2; C up 1; A right 1; M down 1; A right 1; 

@@ -8,7 +8,7 @@ AA..DC
 ......
 
 Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'A': 100, 'D': 100, 'E': 100, 'O': 100}
-Runtime: 0.0604s 
+Runtime: 0.1564s 
 Search path length: 59 states
 Solution path length: 7 moves
 Solution path: C down 2; M left 1; A right 2; E up 1; O left 1; D down 2; A right 2; 

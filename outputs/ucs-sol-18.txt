@@ -8,7 +8,7 @@ EFFP..
 EGG...
 
 Car fuel available: {'M': 100, 'B': 100, 'O': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100, 'E': 100, 'F': 100, 'G': 100}
-Runtime: 43.0073s 
+Runtime: 33.4442s 
 Search path length: 8012 states
 Solution path length: 20 moves
 Solution path: G right 2; P up 2; F right 2; C down 2; D left 3; P down 1; O down 3; B down 1; M right 4; B up 1; A right 1; E up 4; D left 1; A left 1; C up 2; G left 2; F left 3; P down 2; C down 1; A right 4; 

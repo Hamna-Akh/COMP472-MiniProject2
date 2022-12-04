@@ -8,7 +8,7 @@ OPAAEF
 .....I
 
 Car fuel available: {'O': 100, 'P': 100, 'M': 100, 'B': 100, 'C': 100, 'D': 100, 'A': 100, 'E': 100, 'F': 100, 'G': 100, 'H': 100, 'I': 100}
-Runtime: 0.7033s 
+Runtime: 1.8659s 
 Search path length: 643 states
 Solution path length: 13 moves
 Solution path: P down 3; O down 3; A left 2; B down 2; G down 1; M down 2; D left 4; C left 4; F up 2; E up 2; B up 2; M up 2; A right 4; 

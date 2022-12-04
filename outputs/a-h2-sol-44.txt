@@ -8,7 +8,7 @@ MCC.D.
 PPP.D.
 
 Car fuel available: {'O': 100, 'A': 100, 'M': 100, 'B': 100, 'C': 100, 'D': 100, 'P': 100}
-Runtime: 0.5821s 
+Runtime: 1.4077s 
 Search path length: 453 states
 Solution path length: 8 moves
 Solution path: O up 1; B left 3; D up 4; P right 3; C right 2; B right 2; O down 3; A right 4; 

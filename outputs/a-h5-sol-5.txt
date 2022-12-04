@@ -8,7 +8,7 @@ MM.OOO
 ..PD..
 
 Car fuel available: {'M': 100, 'O': 100, 'B': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100, 'E': 100}
-Runtime: 0.6153s 
+Runtime: 1.5273s 
 Search path length: 499 states
 Solution path length: 11 moves
 Solution path: A left 2; D up 2; P up 2; E left 3; C down 1; D down 1; E left 1; P down 2; M right 1; B down 3; A right 4; 

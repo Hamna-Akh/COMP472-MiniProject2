@@ -8,7 +8,7 @@ QQQ.PC
 FFD...
 
 Car fuel available: {'O': 100, 'M': 100, 'B': 100, 'P': 100, 'A': 100, 'C': 100, 'Q': 100, 'D': 100, 'E': 100, 'F': 100}
-Runtime: 38.9925s 
+Runtime: 59.8661s 
 Search path length: 8994 states
 Solution path length: 15 moves
 Solution path: M left 3; C up 2; P up 1; Q right 3; D up 1; F right 2; B down 3; O down 3; A left 2; M left 1; D up 3; E left 2; Q left 2; P down 3; A right 4; 

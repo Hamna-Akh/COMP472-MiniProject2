@@ -8,7 +8,7 @@ M..BBP
 ...Q..
 
 Car fuel available: {'M': 100, 'O': 100, 'P': 100, 'B': 100, 'A': 100, 'Q': 100, 'C': 100}
-Runtime: 10.6193s 
+Runtime: 7.8623s 
 Search path length: 1831 states
 Solution path length: 11 moves
 Solution path: A left 1; M down 2; B left 3; O left 2; Q up 3; C left 3; Q down 3; P down 3; A right 2; O right 1; A right 1; 

@@ -8,7 +8,7 @@ Initial board configuration: ...MMO..P..O..PAAO..PBB....CDD...C..
 ...C..
 
 Car fuel available: {'M': 100, 'O': 100, 'P': 100, 'A': 100, 'B': 100, 'C': 100, 'D': 100}
-Runtime: 4.8321s 
+Runtime: 3.8447s 
 Search path length: 1157 states
 Solution path length: 21 moves
 Solution path: B right 1; P down 1; P down 1; M left 1; A left 1; A left 1; C up 3; M right 1; C down 1; M left 2; C up 2; A right 1; D left 1; B left 1; M left 1; O down 2; M right 1; O down 1; A right 1; P up 1; A right 1; 

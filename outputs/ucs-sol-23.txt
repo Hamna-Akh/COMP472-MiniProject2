@@ -8,7 +8,7 @@ HHOIG.
 ..O...
 
 Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'D': 100, 'E': 100, 'F': 100, 'A': 100, 'G': 100, 'H': 100, 'O': 100, 'I': 100}
-Runtime: 61.2899s 
+Runtime: 46.998s 
 Search path length: 7803 states
 Solution path length: 19 moves
 Solution path: I down 1; G down 2; E up 1; A left 1; D down 3; C down 1; B right 2; O up 3; H right 3; O down 3; F up 1; A right 2; M down 3; A left 1; F down 1; B left 3; F up 1; C up 1; A right 3; 

@@ -8,7 +8,7 @@ PQQQ.C
 P....C
 
 Car fuel available: {'O': 100, 'M': 100, 'B': 100, 'A': 100, 'P': 100, 'Q': 100, 'C': 100}
-Runtime: 0.0388s 
+Runtime: 0.1067s 
 Search path length: 54 states
 Solution path length: 6 moves
 Solution path: O left 1; M left 1; C up 4; Q right 2; B down 3; A right 4; 

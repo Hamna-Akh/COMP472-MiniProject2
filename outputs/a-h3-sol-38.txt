@@ -8,24 +8,29 @@ Initial board configuration: ..MOOO..M..B..AACB.PPPC....DEE.FFD..
 .FFD..
 
 Car fuel available: {'M': 100, 'O': 100, 'B': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100, 'E': 100, 'F': 100}
-Runtime: 0.3094s 
-Search path length: 219 states
-Solution path length: 9 moves
-Solution path: P left 1; A left 1; D up 2; E left 2; B down 3; C down 2; E left 1; D down 2; A right 3; 
+Runtime: 1.4229s 
+Search path length: 472 states
+Solution path length: 14 moves
+Solution path: C up 1; P right 2; A left 2; M down 3; O left 2; C up 1; F left 1; O left 1; M down 1; P left 3; D up 4; E left 1; B down 2; A right 4; 
 
-P left 1             99 ..MOOO..M..B..AACBPPP.C....DEE.FFD..
-A left 1             99 ..MOOO..M..B.AA.CBPPP.C....DEE.FFD..
-D up 2             98 ..MOOO..M..B.AADCBPPPDC.....EE.FF...
-E left 2             98 ..MOOO..M..B.AADCBPPPDC...EE...FF...
-B down 3             97 ..MOOO..M....AADC.PPPDC...EE.B.FF..B
-C down 2             98 ..MOOO..M....AAD..PPPD....EECB.FF.CB
-E left 1             97 ..MOOO..M....AAD..PPPD...EE.CB.FF.CB
-D down 2             96 ..MOOO..M....AA...PPP....EEDCB.FFDCB
-A right 3             96 ..MOOO..M.......AAPPP....EEDCB.FFDCB
+C up 1             99 ..MOOO..M.CB..AACB.PPP.....DEE.FFD..
+P right 2             98 ..MOOO..M.CB..AACB...PPP...DEE.FFD..
+A left 2             98 ..MOOO..M.CBAA..CB...PPP...DEE.FFD..
+M down 3             97 ...OOO....CBAA..CB..MPPP..MDEE.FFD..
+O left 2             98 .OOO......CBAA..CB..MPPP..MDEE.FFD..
+C up 1             98 .OOOC.....CBAA...B..MPPP..MDEE.FFD..
+F left 1             99 .OOOC.....CBAA...B..MPPP..MDEEFF.D..
+O left 1             97 OOO.C.....CBAA...B..MPPP..MDEEFF.D..
+M down 1             96 OOO.C.....CBAA...B...PPP..MDEEFFMD..
+P left 3             95 OOO.C.....CBAA...BPPP.....MDEEFFMD..
+D up 4             96 OOODC....DCBAA...BPPP.....M.EEFFM...
+E left 1             99 OOODC....DCBAA...BPPP.....MEE.FFM...
+B down 2             98 OOODC....DC.AA....PPP..B..MEEBFFM...
+A right 4             94 OOODC....DC.....AAPPP..B..MEEBFFM...
 
-..MOOO
-..M...
+OOODC.
+...DC.
 ....AA
-PPP...
-.EEDCB
-.FFDCB
+PPP..B
+..MEEB
+FFM...

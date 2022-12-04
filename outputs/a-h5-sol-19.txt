@@ -8,7 +8,7 @@ AAMBP.
 ......
 
 Car fuel available: {'O': 100, 'M': 100, 'B': 100, 'P': 100, 'A': 100}
-Runtime: 0.2378s 
+Runtime: 0.1919s 
 Search path length: 65 states
 Solution path length: 5 moves
 Solution path: M down 2; P down 2; O left 1; B down 2; A right 4; 

@@ -8,7 +8,7 @@ PPPC..
 ...D..
 
 Car fuel available: {'O': 100, 'M': 100, 'B': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100}
-Runtime: 0.0189s 
+Runtime: 0.0488s 
 Search path length: 33 states
 Solution path length: 6 moves
 Solution path: B right 1; M right 1; C up 2; P right 3; O down 3; A right 4; 

@@ -8,7 +8,7 @@ FFG.EP
 .IIJJP
 
 Car fuel available: {'O': 100, 'M': 100, 'B': 100, 'C': 100, 'D': 100, 'A': 100, 'E': 100, 'F': 100, 'G': 100, 'P': 100, 'H': 100, 'I': 100, 'J': 100}
-Runtime: 27.9215s 
+Runtime: 21.7253s 
 Search path length: 5228 states
 Solution path length: 45 moves
 Solution path: D down 1; P up 2; J right 1; H right 1; D down 2; I left 1; G down 1; A right 1; F right 2; O down 1; M down 3; E up 1; B left 2; C left 1; P up 1; F right 2; G up 1; D up 1; I right 2; O down 2; A left 2; G up 3; M down 1; A right 2; A left 1; D up 2; A left 1; F left 3; P down 1; C right 1; D down 2; A right 1; D up 3; A right 1; O up 1; F right 1; M up 1; I left 1; J left 1; H left 2; P down 2; I left 1; J left 1; E down 3; A right 2; 

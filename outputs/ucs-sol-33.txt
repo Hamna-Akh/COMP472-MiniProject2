@@ -8,7 +8,7 @@ AACPO.
 ......
 
 Car fuel available: {'M': 100, 'B': 100, 'O': 100, 'C': 100, 'P': 100, 'A': 100, 'D': 100}
-Runtime: 0.5108s 
+Runtime: 1.3553s 
 Search path length: 515 states
 Solution path length: 11 moves
 Solution path: P down 2; C down 3; A right 2; M down 4; A left 1; B left 1; P up 3; D left 3; P down 3; O down 3; A right 3; 

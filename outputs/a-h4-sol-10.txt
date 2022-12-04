@@ -8,7 +8,7 @@ P..Q.B
 EECFF.
 
 Car fuel available: {'O': 100, 'M': 100, 'P': 100, 'A': 100, 'Q': 100, 'B': 100, 'C': 100, 'D': 100, 'E': 100, 'F': 100}
-Runtime: 5.8526s 
+Runtime: 4.5971s 
 Search path length: 1625 states
 Solution path length: 20 moves
 Solution path: C up 1; E right 1; P down 2; A left 1; Q up 2; C up 2; D left 3; B down 1; F right 1; Q down 3; M down 1; O right 3; C up 1; A right 2; P up 1; A right 1; C down 1; O left 1; M up 1; A right 1; 

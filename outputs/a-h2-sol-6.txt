@@ -8,7 +8,7 @@ MMBBCO
 .P.FGG
 
 Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'O': 100, 'A': 100, 'D': 100, 'P': 100, 'E': 100, 'F': 100, 'G': 100}
-Runtime: 0.4806s 
+Runtime: 1.2078s 
 Search path length: 496 states
 Solution path length: 18 moves
 Solution path: D down 1; C down 1; A right 1; O down 2; B right 2; M right 2; P up 3; E left 2; F up 1; G left 3; F down 1; E right 2; P down 1; M left 2; B left 2; O down 1; C up 1; A right 2; 

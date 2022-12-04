@@ -8,7 +8,7 @@ Initial board configuration: ...M.O...MBO..AABO...CDD...CEE......
 ......
 
 Car fuel available: {'M': 100, 'O': 100, 'B': 100, 'A': 100, 'C': 100, 'D': 100, 'E': 100}
-Runtime: 6.0891s 
+Runtime: 4.6453s 
 Search path length: 1233 states
 Solution path length: 8 moves
 Solution path: A left 1; C up 1; E left 3; C down 2; D left 1; B up 1; O down 3; A right 3; 

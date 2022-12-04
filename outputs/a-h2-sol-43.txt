@@ -8,7 +8,7 @@ BBC.DD
 ..C...
 
 Car fuel available: {'M': 100, 'O': 100, 'P': 100, 'A': 100, 'B': 100, 'C': 100, 'D': 100}
-Runtime: 0.3021s 
+Runtime: 0.8382s 
 Search path length: 336 states
 Solution path length: 8 moves
 Solution path: A left 2; C up 2; D left 2; O down 3; P right 3; M right 1; C up 2; A right 4; 

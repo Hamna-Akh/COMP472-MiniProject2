@@ -8,7 +8,7 @@ GGHOF.
 ......
 
 Car fuel available: {'M': 100, 'B': 100, 'C': 100, 'D': 100, 'E': 100, 'A': 100, 'O': 100, 'F': 100, 'G': 100, 'H': 100}
-Runtime: 2.0763s 
+Runtime: 1.5709s 
 Search path length: 721 states
 Solution path length: 17 moves
 Solution path: H down 1; G right 1; F down 1; O down 1; D down 1; C down 1; B right 3; E up 1; A right 1; M down 3; A left 1; E down 1; B left 4; E up 1; D up 1; C up 1; A right 4; 

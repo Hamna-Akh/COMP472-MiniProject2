@@ -8,26 +8,30 @@ MM.OOO
 ..PD..
 
 Car fuel available: {'M': 100, 'O': 100, 'B': 100, 'A': 100, 'C': 100, 'P': 100, 'D': 100, 'E': 100}
-Runtime: 0.5786s 
-Search path length: 499 states
-Solution path length: 11 moves
-Solution path: A left 2; D up 2; P up 2; E left 3; C down 1; D down 1; E left 1; P down 2; M right 1; B down 3; A right 4; 
+Runtime: 3.0682s 
+Search path length: 870 states
+Solution path length: 15 moves
+Solution path: A left 1; D up 2; E left 1; B down 3; A left 1; P up 2; E left 3; D down 1; B up 2; P down 2; M right 1; C down 2; A right 1; B down 2; A right 3; 
 
-A left 2             98 MM.OOO.....BAA..CB..P.C...PDEE..PD..
-D up 2             98 MM.OOO.....BAA.DCB..PDC...P.EE..P...
-P up 2             98 MM.OOO..P..BAAPDCB..PDC.....EE......
-E left 3             97 MM.OOO..P..BAAPDCB..PDC..EE.........
-C down 1             99 MM.OOO..P..BAAPD.B..PDC..EE.C.......
-D down 1             97 MM.OOO..P..BAAP..B..PDC..EEDC.......
-E left 1             96 MM.OOO..P..BAAP..B..PDC.EE.DC.......
-P down 2             96 MM.OOO.....BAA...B..PDC.EEPDC...P...
-M right 1             99 .MMOOO.....BAA...B..PDC.EEPDC...P...
-B down 3             97 .MMOOO......AA......PDC.EEPDCB..P..B
-A right 4             94 .MMOOO..........AA..PDC.EEPDCB..P..B
+A left 1             99 MM.OOO.....B.AA.CB..P.C...PDEE..PD..
+D up 2             98 MM.OOO.....B.AADCB..PDC...P.EE..P...
+E left 1             99 MM.OOO.....B.AADCB..PDC...PEE...P...
+B down 3             97 MM.OOO.......AADC...PDC...PEEB..P..B
+A left 1             98 MM.OOO......AA.DC...PDC...PEEB..P..B
+P up 2             98 MM.OOO..P...AAPDC...PDC....EEB.....B
+E left 3             96 MM.OOO..P...AAPDC...PDC.EE...B.....B
+D down 1             97 MM.OOO..P...AAP.C...PDC.EE.D.B.....B
+B up 2             95 MM.OOO..P...AAP.CB..PDCBEE.D........
+P down 2             96 MM.OOO......AA..CB..PDCBEEPD....P...
+M right 1             99 .MMOOO......AA..CB..PDCBEEPD....P...
+C down 2             98 .MMOOO......AA...B..PD.BEEPDC...P.C.
+A right 1             97 .MMOOO.......AA..B..PD.BEEPDC...P.C.
+B down 2             93 .MMOOO.......AA.....PD..EEPDCB..P.CB
+A right 3             94 .MMOOO..........AA..PD..EEPDCB..P.CB
 
 .MMOOO
 ......
 ....AA
-..PDC.
+..PD..
 EEPDCB
-..P..B
+..P.CB
